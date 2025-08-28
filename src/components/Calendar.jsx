@@ -88,6 +88,17 @@ const Calendar = () => {
     if (!showLunar) return '';
     if (day.solarTerm) return day.solarTerm;
     if (day.festival) return day.festival;
+    
+    // 根据不同语言正确组合农历月份和日期
+    if (currentLanguage === 'en') {
+      // 英语中：月份和日期之间加空格
+      return `${day.lunarMonth} ${day.lunarDay}`;
+    } else if (currentLanguage === 'ja') {
+      // 日语中：月份后已包含"月"字，直接拼接日期
+      return `${day.lunarMonth}${day.lunarDay}`;
+    }
+    
+    // 默认中文：直接拼接月份和日期
     return day.lunarDay;
   };
 
@@ -212,10 +223,10 @@ const Calendar = () => {
                     weekday: 'long'
                   })}
                 </div>
-                {showLunar && currentLanguage.startsWith('zh') && (
+                {showLunar && (
                   <div className="text-white/70 text-sm mb-3">
-                    {monthData.find(day => day.fullDate.toDateString() === selectedDate.toDateString())?.lunarMonth || '七月'}
-                    {monthData.find(day => day.fullDate.toDateString() === selectedDate.toDateString())?.lunarDay || '初五'}
+                    {monthData.find(day => day.fullDate.toDateString() === selectedDate.toDateString())?.lunarMonth || ''}
+                    {monthData.find(day => day.fullDate.toDateString() === selectedDate.toDateString())?.lunarDay || ''}
                   </div>
                 )}
 
@@ -256,7 +267,7 @@ const Calendar = () => {
                       <div>
                         <div className="text-white text-lg font-medium">{upcomingEvent.name}</div>
                         <div className="text-white/70 text-sm">
-                          {upcomingEvent.lunarDate || formatDate(upcomingEvent.date)}
+                            {showLunar ? (upcomingEvent.lunarDate || formatDate(upcomingEvent.date)) : formatDate(upcomingEvent.date)}
                         </div>
                       </div>
                       <div className="text-white text-2xl font-light">

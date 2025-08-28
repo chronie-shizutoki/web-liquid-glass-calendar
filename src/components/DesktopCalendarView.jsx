@@ -56,7 +56,7 @@ const DesktopCalendarView = ({
               year: 'numeric'
             })}
           </div>
-          {showLunar && currentLanguage.startsWith('zh') && (
+          {showLunar && (
             <div className="text-white/60 text-sm mt-2">
               {(() => {
                 const today = new Date();
@@ -114,7 +114,7 @@ const DesktopCalendarView = ({
                 </div>
                 
                 {/* 农历信息 */}
-                {showLunar && currentLanguage.startsWith('zh') && day.isCurrentMonth && (
+                {showLunar && day.isCurrentMonth && (
                   <div className={`
                     text-xs mb-1
                     ${day.solarTerm ? 'text-orange-400 font-medium' : 
@@ -167,7 +167,7 @@ const DesktopCalendarView = ({
             return (
               <div className="space-y-3">
                 {/* 农历信息 */}
-                {showLunar && currentLanguage.startsWith('zh') && selectedDayData && (
+                {showLunar && selectedDayData && (
                   <div className="flex items-center gap-2">
                     <span className="text-white/70 text-sm">{t('lunarInfo')}</span>
                     <span className="text-white text-sm">

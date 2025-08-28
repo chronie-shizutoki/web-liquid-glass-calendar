@@ -64,7 +64,7 @@ export const solarToLunar = (date, language = 'zh-CN') => {
   const lunarMonth = LunarMonth.fromYm(lunar.getYear(), lunar.getMonth());
   
   // 获取对应语言的农历月份和日期名称
-  const monthIndex = lunar.getMonth() - 1;
+  let monthIndex = lunar.getMonth() - 1;
   const dayIndex = lunar.getDay() - 1;
   
   let lunarMonthName, lunarDayName;
@@ -72,18 +72,22 @@ export const solarToLunar = (date, language = 'zh-CN') => {
   // 确保语言存在于映射表中，如果不存在则使用默认的中文
   if (LUNAR_TERMS[currentLanguage]) {
     const terms = LUNAR_TERMS[currentLanguage];
+    lunarMonthName = terms.monthNames[monthIndex];
     
-    // 处理月份名称（包括闰月）
-    if (lunarMonth.isLeap()) {
-      lunarMonthName = terms.leap + terms.monthNames[monthIndex];
-    } else {
-      lunarMonthName = terms.monthNames[monthIndex];
+    // 修复日期名称处理 - 确保日期索引在有效范围内
+    const safeDayIndex = Math.max(0, Math.min(29, dayIndex));
+    lunarDayName = terms.dayNames[safeDayIndex];
+    
+      // Special handling for different languages
+    if (currentLanguage === 'en') {
+      // In English, add 'Month' after the lunar month number
+      lunarMonthName = ' Month' + terms.monthNames[monthIndex] + ' ';
+    } else if (currentLanguage === 'ja' || currentLanguage.startsWith('zh')) {
+      // For Chinese and Japanese, add '月' after the lunar month number
+      lunarMonthName = terms.monthNames[monthIndex] + '月';
     }
-    
-    // 处理日期名称
-    lunarDayName = terms.dayNames[dayIndex] || lunar.getDayInChinese();
   } else {
-    // 默认使用中文
+    // Use Chinese by default
     lunarMonthName = lunar.getMonthInChinese();
     lunarDayName = lunar.getDayInChinese();
   }

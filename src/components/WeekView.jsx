@@ -90,7 +90,7 @@ const WeekView = ({
                 {day.date}
               </div>
 
-              {showLunar && currentLanguage.startsWith('zh') && (
+              {showLunar && (
                 <div className="text-xs text-white/60 mb-1">
                   {getLunarDisplay(day)}
                 </div>
