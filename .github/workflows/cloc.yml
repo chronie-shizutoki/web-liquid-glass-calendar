@@ -1,0 +1,70 @@
+name: CLOC Code Statistics
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  schedule:
+    - cron: '0 0 1 * *' # 每月1日运行一次
+  workflow_dispatch: # 允许手动触发
+
+jobs:
+  cloc:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          if [ -f package.json ]; then
+            npm install
+          fi
+
+      - name: Install cloc
+        run: sudo apt-get update && sudo apt-get install -y cloc
+
+      - name: Run cloc
+        run: |
+          # 排除node_modules, dist, build等目录
+          cloc . --exclude-dir=node_modules,dist,build,public,.vscode,scripts,.git --include-lang=JavaScript,TypeScript,JSX,TSX,CSS,HTML,JSON,Markdown
+
+      - name: Generate detailed cloc report
+        run: |
+          mkdir -p reports
+          cloc . --exclude-dir=node_modules,dist,build,public,.vscode,scripts,.git --include-lang=JavaScript,TypeScript,JSX,TSX,CSS,HTML,JSON,Markdown --json > reports/cloc_report.json
+          cloc . --exclude-dir=node_modules,dist,build,public,.vscode,scripts,.git --include-lang=JavaScript,TypeScript,JSX,TSX,CSS,HTML,JSON,Markdown --report-file=reports/cloc_report.txt
+
+      - name: Upload cloc report
+        uses: actions/upload-artifact@v4
+        with:
+          name: cloc-report
+          path: reports/
+
+      - name: Post cloc summary to PR comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('reports/cloc_report.txt', 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `### Code Statistics for this PR\n\n\`\`\`\n${report}\n\`\`\``
+            });
+
+      - name: Create summary
+        run: |
+          echo "### Code Statistics" >> $GITHUB_STEP_SUMMARY
+          echo "\n\`\`\`" >> $GITHUB_STEP_SUMMARY
+          cat reports/cloc_report.txt >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
