@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon, CalendarDays, CalendarRange, List, Settings } from 'lucide-react';
 import { useCalendar } from '../hooks/useCalendar.js';
-import { useStatusBar } from '../hooks/useStatusBar.js';
 import { useLanguage } from '../hooks/useLanguage.js';
 import { useNavigation } from '../hooks/useNavigation.js';
 import EventModal from './EventModal.jsx';
@@ -33,14 +32,7 @@ const Calendar = () => {
     getUpcomingEvents
   } = useCalendar();
 
-  const {
-    currentTime,
-    batteryLevel,
-    isCharging,
-    networkType,
-    signalStrength,
-    temperature
-  } = useStatusBar();
+
 
   const {
     currentLanguage,
@@ -89,36 +81,7 @@ const Calendar = () => {
         <div className="absolute bottom-40 left-20 w-40 h-40 bg-pink-500/20 rounded-full blur-3xl floating-animation" style={{ animationDelay: '4s' }}></div>
       </div>
 
-      {/* 状态栏 - 实时数据 */}
-      <div className="flex justify-between items-center text-white text-sm mb-6 px-2 relative z-10">
-        <div className="flex items-center gap-1">
-          <span className="font-medium">{currentTime}</span>
-          {isCharging && (
-            <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center text-xs pulse-glow">⚡</div>
-          )}
-        </div>
-        <div className="flex items-center gap-2 text-xs">
-          <span>{temperature}°</span>
-          <span>❄️</span>
-          <span>{networkType}</span>
-          <div className="flex gap-1">
-            {[1, 2, 3, 4].map((bar) => (
-              <div
-                key={bar}
-                className={`w-1 h-3 rounded-full ${bar <= signalStrength ? 'bg-white' : 'bg-white/30'
-                  }`}
-              ></div>
-            ))}
-          </div>
-          <div className="w-6 h-3 border border-white rounded-sm relative">
-            <div
-              className="h-2 bg-white rounded-sm absolute top-0.5 left-0.5 transition-all duration-300"
-              style={{ width: `${Math.max(batteryLevel, 10)}%` }}
-            ></div>
-          </div>
-          <span className="ml-1">{batteryLevel}%</span>
-        </div>
-      </div>
+
 
       {/* 顶部操作栏 */}
       {currentView !== 'settings' && (
