@@ -64,6 +64,13 @@ const Calendar = () => {
     localStorage.setItem('calendar-week-start', weekStart);
   }, [weekStart]);
 
+  // Update HTML lang attribute when language changes
+  useEffect(() => {
+    console.log('Current language:', currentLanguage);
+    document.documentElement.setAttribute('lang', currentLanguage);
+    console.log('Updated lang attribute:', document.documentElement.lang);
+  }, [currentLanguage]);
+
   // Handle date click
   const handleDateClick = (day) => {
     setSelectedDate(day.fullDate);
