@@ -168,7 +168,7 @@ const DesktopCalendarView = ({
                 {/* 农历信息 */}
                 {currentLanguage.startsWith('zh') && selectedDayData && (
                   <div className="flex items-center gap-2">
-                    <span className="text-white/70 text-sm">农历:</span>
+                    <span className="text-white/70 text-sm">{t('lunarInfo')}</span>
                     <span className="text-white text-sm">
                       {selectedDayData.lunarMonth}{selectedDayData.lunarDay}
                     </span>
@@ -183,7 +183,7 @@ const DesktopCalendarView = ({
                 {/* 事件列表 */}
                 {selectedDateEvents.length > 0 ? (
                   <div className="space-y-2">
-                    <span className="text-white/70 text-sm">今日事件:</span>
+                    <span className="text-white/70 text-sm">{t('todayEvents')}:</span>
                     {selectedDateEvents.map((event, index) => (
                       <div key={index} className="glass-card rounded-lg p-3">
                         <div className="text-white font-medium">{event.title}</div>

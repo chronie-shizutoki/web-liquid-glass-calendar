@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 // 语言包
 const translations = {
@@ -117,6 +117,23 @@ const translations = {
     enableEventNotifications: '开启事件到期提醒',
     
     // 传统节日
+    // 过滤器和统计
+    all: '全部',
+    todayEvents: '今日事件',
+    weekEvents: '本周事件',
+    monthEvents: '本月事件',
+    eventsCount: '个事件',
+    noEventsToday: '今天没有安排的事件',
+    noEventsWeek: '本周没有安排的事件',
+    noEventsMonth: '本月没有安排的事件',
+    noEventsRecent: '近期没有安排的事件',
+    
+    // 确认对话框
+    confirmClearAllEvents: '确定要清除所有事件吗？此操作不可撤销。',
+    
+    // 农历信息
+    lunarInfo: '农历:',
+    
     festivals: {
       'newYear': '元旦',
       'valentineDay': '情人节',
@@ -233,6 +250,23 @@ const translations = {
     setFirstDayOfWeek: '設定一週的第一天',
     eventReminders: '事件提醒',
     enableEventNotifications: '開啟事件到期提醒',
+    
+    // 過濾器和統計
+    all: '全部',
+    todayEvents: '今日事件',
+    weekEvents: '本週事件',
+    monthEvents: '本月事件',
+    eventsCount: '個事件',
+    noEventsToday: '今天沒有安排的事件',
+    noEventsWeek: '本週沒有安排的事件',
+    noEventsMonth: '本月沒有安排的事件',
+    noEventsRecent: '近期沒有安排的事件',
+    
+    // 確認對話框
+    confirmClearAllEvents: '確定要清除所有事件嗎？此操作不可撤銷。',
+    
+    // 農曆資訊
+    lunarInfo: '農曆:',
     
     festivals: {
       'newYear': '元旦',
@@ -353,6 +387,23 @@ const translations = {
     eventReminders: 'Event Reminders',
     enableEventNotifications: 'Enable event notifications',
     
+    // Filters and statistics
+    all: 'All',
+    todayEvents: 'Today\'s Events',
+    weekEvents: 'This Week\'s Events',
+    monthEvents: 'This Month\'s Events',
+    eventsCount: 'events',
+    noEventsToday: 'No events scheduled for today',
+    noEventsWeek: 'No events scheduled for this week',
+    noEventsMonth: 'No events scheduled for this month',
+    noEventsRecent: 'No events scheduled recently',
+    
+    // Confirmation dialogs
+    confirmClearAllEvents: 'Are you sure you want to clear all events? This action cannot be undone.',
+    
+    // Lunar information
+    lunarInfo: 'Lunar:',
+    
     festivals: {
       'newYear': 'New Year',
       'valentineDay': 'Valentine\'s Day',
@@ -469,6 +520,23 @@ const translations = {
     setFirstDayOfWeek: '週の最初の日を設定',
     eventReminders: 'イベントリマインダー',
     enableEventNotifications: 'イベント通知を有効にする',
+    
+    // フィルターと統計
+    all: 'すべて',
+    todayEvents: '今日のイベント',
+    weekEvents: '今週のイベント',
+    monthEvents: '今月のイベント',
+    eventsCount: 'イベント',
+    noEventsToday: '今日は予定されたイベントがありません',
+    noEventsWeek: '今週は予定されたイベントがありません',
+    noEventsMonth: '今月は予定されたイベントがありません',
+    noEventsRecent: '最近予定されたイベントがありません',
+    
+    // 確認ダイアログ
+    confirmClearAllEvents: 'すべてのイベントを削除してもよろしいですか？この操作は元に戻せません。',
+    
+    // 旧暦情報
+    lunarInfo: '旧暦:',
     
     festivals: {
       'newYear': '元旦',

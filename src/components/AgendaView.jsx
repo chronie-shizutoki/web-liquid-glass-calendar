@@ -109,10 +109,10 @@ const AgendaView = ({
             onChange={(e) => setFilterType(e.target.value)}
             className="glass-button px-3 py-2 rounded-lg text-white text-sm bg-transparent border border-white/20"
           >
-            <option value="all" className="bg-gray-800">全部</option>
-            <option value="today" className="bg-gray-800">今天</option>
-            <option value="week" className="bg-gray-800">本周</option>
-            <option value="month" className="bg-gray-800">本月</option>
+            <option value="all" className="bg-gray-800">{t('all')}</option>
+            <option value="today" className="bg-gray-800">{t('today')}</option>
+            <option value="week" className="bg-gray-800">{t('week')}</option>
+            <option value="month" className="bg-gray-800">{t('month')}</option>
           </select>
           <button className="glass-button p-2 rounded-lg">
             <Filter className="h-4 w-4 text-white" />
@@ -126,7 +126,7 @@ const AgendaView = ({
           <div className="text-white text-2xl font-light mb-1">
             {getEventsForDate(new Date()).length}
           </div>
-          <div className="text-white/70 text-sm">今日事件</div>
+          <div className="text-white/70 text-sm">{t('todayEvents')}</div>
         </div>
         <div className="glass-card rounded-xl p-4 text-center">
           <div className="text-white text-2xl font-light mb-1">
@@ -142,13 +142,13 @@ const AgendaView = ({
               }).length;
             })()}
           </div>
-          <div className="text-white/70 text-sm">本周事件</div>
+          <div className="text-white/70 text-sm">{t('weekEvents')}</div>
         </div>
         <div className="glass-card rounded-xl p-4 text-center">
           <div className="text-white text-2xl font-light mb-1">
             {getEventsForMonth().length}
           </div>
-          <div className="text-white/70 text-sm">本月事件</div>
+          <div className="text-white/70 text-sm">{t('monthEvents')}</div>
         </div>
       </div>
 
@@ -190,13 +190,13 @@ const AgendaView = ({
                       })}
                     </div>
                     <div className="text-white/60 text-sm">
-                      {dayEvents.length} 个事件
+                      {dayEvents.length} {t('eventsCount')}
                     </div>
                   </div>
                   {isEventToday(eventDate) && (
                     <div className="ml-auto">
                       <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full text-xs">
-                        今天
+                        {t('today')}
                       </span>
                     </div>
                   )}
@@ -279,12 +279,12 @@ const AgendaView = ({
         ) : (
           <div className="glass-card rounded-2xl p-8 text-center">
             <Calendar className="h-12 w-12 text-white/40 mx-auto mb-4" />
-            <div className="text-white/60 text-lg mb-2">暂无事件</div>
+            <div className="text-white/60 text-lg mb-2">{t('noEvents')}</div>
             <div className="text-white/40 text-sm">
-              {filterType === 'today' ? '今天没有安排的事件' :
-               filterType === 'week' ? '本周没有安排的事件' :
-               filterType === 'month' ? '本月没有安排的事件' :
-               '近期没有安排的事件'}
+              {filterType === 'today' ? t('noEventsToday') :
+               filterType === 'week' ? t('noEventsWeek') :
+               filterType === 'month' ? t('noEventsMonth') :
+               t('noEventsRecent')}
             </div>
           </div>
         )}

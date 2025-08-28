@@ -14,7 +14,7 @@ const WeekView = ({
   getEventsForDate,
   getLunarDisplay
 }) => {
-  const { currentLanguage, t } = useLanguage();
+  const { currentLanguage } = useLanguage();
 
   const formatWeekRange = () => {
     const startOfWeek = new Date(weekData[0].fullDate);

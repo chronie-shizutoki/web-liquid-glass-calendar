@@ -99,7 +99,7 @@ const SettingsView = ({
 
   // 清除所有事件
   const clearAllEvents = () => {
-    if (confirm('确定要清除所有事件吗？此操作不可撤销。')) {
+    if (confirm(t('confirmClearAllEvents'))) {
       events.forEach(event => removeEvent(event.id));
     }
   };

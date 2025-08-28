@@ -346,7 +346,7 @@ const Calendar = () => {
               <CalendarRange className="h-4 w-4 text-white" />
             </div>
             <span className={`text-xs ${currentView === 'desktop' ? 'text-blue-400' : 'text-white/70'}`}>
-              台历
+              {t('desktop')}
             </span>
           </button>
 
@@ -361,7 +361,7 @@ const Calendar = () => {
               <List className="h-4 w-4 text-white" />
             </div>
             <span className={`text-xs ${currentView === 'agenda' ? 'text-blue-400' : 'text-white/70'}`}>
-              日程
+              {t('agenda')}
             </span>
           </button>
 
@@ -376,7 +376,7 @@ const Calendar = () => {
               <Settings className="h-4 w-4 text-white" />
             </div>
             <span className={`text-xs ${currentView === 'settings' ? 'text-blue-400' : 'text-white/70'}`}>
-              设置
+              {t('settings')}
             </span>
           </button>
         </div>
