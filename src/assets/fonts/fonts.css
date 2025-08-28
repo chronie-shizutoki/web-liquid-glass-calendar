@@ -1,6 +1,6 @@
 /* Global font definition - Localized version */
 
-/* Cormorant Garamond 字体定义 */
+/* Cormorant Garamond */
 @font-face {
   font-family: 'Cormorant Garamond';
   font-style: italic;
@@ -72,7 +72,7 @@
   src: url('./cormorant-garamond/co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_hg9GnM.ttf') format('truetype');
 }
 
-/* EB Garamond 字体定义 */
+/* EB Garamond */
 @font-face {
   font-family: 'EB Garamond';
   font-style: normal;
@@ -144,7 +144,7 @@
   src: url('./eb-garamond/SlGFmQSNjdsmc35JDF1K5GRwUjcdlttVFm-rI7c8R496.ttf') format('truetype');
 }
 
-/* Noto Serif SC 字体定义 */
+/* Noto Serif SC */
 @font-face {
   font-family: 'Noto Serif SC';
   font-style: normal;
@@ -202,7 +202,7 @@
   src: url('./noto-serif-sc/H4cyBXePl9DZ0Xe7gG9cyOj7uK2-n-D2rd4FY7QrrCWv.ttf') format('truetype');
 }
 
-/* Noto Serif TC 字体定义 */
+/* Noto Serif TC */
 @font-face {
   font-family: 'Noto Serif TC';
   font-style: normal;
@@ -260,7 +260,7 @@
   src: url('./noto-serif-tc/XLYzIZb5bJNDGYxLBibeHZ0BnHwmuanx8cUaGX_zN-pD.ttf') format('truetype');
 }
 
-/* Noto Serif JP 字体定义 */
+/* Noto Serif JP */
 @font-face {
   font-family: 'Noto Serif JP';
   font-style: normal;
@@ -318,7 +318,7 @@
   src: url('./noto-serif-jp/xn71YHs72GKoTvER4Gn3b5eMRtWGkp6o7MjQ2bzvPebA.ttf') format('truetype');
 }
 
-/* Playfair Display 字体定义 */
+/* Playfair Display */
 @font-face {
   font-family: 'Playfair Display';
   font-style: normal;
