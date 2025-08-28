@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Globe, Check } from 'lucide-react';
 
 const LanguageSelector = ({ currentLanguage, onLanguageChange }) => {
@@ -42,17 +43,17 @@ const LanguageSelector = ({ currentLanguage, onLanguageChange }) => {
         <span className="text-white text-sm hidden sm:inline">{currentLang.flag}</span>
       </button>
 
-      {isOpen && (
+      {isOpen && createPortal(
         <>
           {/* 背景遮罩 */}
           <div
-            className="fixed inset-0 z-[9998]"
+            className="fixed inset-0 z-[999999]"
             onClick={() => setIsOpen(false)}
           ></div>
 
           {/* 语言选择菜单 */}
           <div 
-            className="fixed glass-card rounded-xl p-2 min-w-48 z-[9999]"
+            className="fixed glass-card rounded-xl p-2 min-w-48 z-[999999]"
             style={{
               top: `${menuPosition.top}px`,
               right: `${menuPosition.right}px`
@@ -78,7 +79,8 @@ const LanguageSelector = ({ currentLanguage, onLanguageChange }) => {
               </button>
             ))}
           </div>
-        </>
+        </>,
+        document.body
       )}
     </div>
   );
