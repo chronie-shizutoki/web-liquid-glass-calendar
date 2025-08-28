@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Plus, Settings } from 'lucide-react';
 import { useCalendar } from '../hooks/useCalendar.js';
 import { useStatusBar } from '../hooks/useStatusBar.js';
+import { useLanguage } from '../hooks/useLanguage.js';
 import EventModal from './EventModal.jsx';
+import LanguageSelector from './LanguageSelector.jsx';
 
 const Calendar = () => {
   const {
@@ -28,6 +30,14 @@ const Calendar = () => {
     signalStrength,
     temperature
   } = useStatusBar();
+
+  const {
+    currentLanguage,
+    changeLanguage,
+    t,
+    formatDate,
+    formatTime
+  } = useLanguage();
 
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState(null);
@@ -118,18 +128,22 @@ const Calendar = () => {
             onClick={goToToday}
             className="glass-button px-4 py-2 rounded-full text-white text-sm"
           >
-            今天
+            {t('today')}
           </button>
         </div>
 
         {/* 右侧操作按钮 */}
-        <div className="flex gap-4">
+        <div className="flex gap-2">
           <button
             onClick={handleAddEvent}
             className="glass-button p-3 rounded-full"
           >
             <Plus className="h-6 w-6 text-white" />
           </button>
+          <LanguageSelector 
+            currentLanguage={currentLanguage}
+            onLanguageChange={changeLanguage}
+          />
           <button className="glass-button p-3 rounded-full">
             <Settings className="h-6 w-6 text-white" />
           </button>
@@ -187,16 +201,18 @@ const Calendar = () => {
         {/* 选中日期信息 */}
         <div className="glass-card rounded-2xl p-4 floating-animation">
           <div className="text-white text-lg font-medium mb-2">
-            {selectedDate.toLocaleDateString('zh-CN', {
+            {formatDate(selectedDate, {
               month: 'long',
               day: 'numeric',
               weekday: 'long'
             })}
           </div>
-          <div className="text-white/70 text-sm mb-3">
-            {monthData.find(day => day.fullDate.toDateString() === selectedDate.toDateString())?.lunarMonth || '七月'}
-            {monthData.find(day => day.fullDate.toDateString() === selectedDate.toDateString())?.lunarDay || '初五'}
-          </div>
+          {currentLanguage.startsWith('zh') && (
+            <div className="text-white/70 text-sm mb-3">
+              {monthData.find(day => day.fullDate.toDateString() === selectedDate.toDateString())?.lunarMonth || '七月'}
+              {monthData.find(day => day.fullDate.toDateString() === selectedDate.toDateString())?.lunarDay || '初五'}
+            </div>
+          )}
 
           {/* 当日事件列表 */}
           {selectedDateEvents.length > 0 ? (
@@ -220,13 +236,8 @@ const Calendar = () => {
               ))}
             </div>
           ) : (
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-blue-500 rounded flex items-center justify-center text-white text-xs pulse-glow">
-                宜
-              </div>
-              <div className="text-white/80 text-sm">
-                安机械 纳采 订盟 ... 忌 入宅 嫁娶 掘井 牧养
-              </div>
+            <div className="text-white/60 text-sm text-center py-4">
+              {t('noEvents')}
             </div>
           )}
         </div>
@@ -234,11 +245,11 @@ const Calendar = () => {
         {/* 即将到来的事件 */}
         <div className="glass-card rounded-2xl p-4 flex justify-between items-center floating-animation" style={{ animationDelay: '1s' }}>
           <div>
-            <div className="text-white text-lg font-medium">七夕</div>
-            <div className="text-white/70 text-sm">七月初七</div>
+            <div className="text-white text-lg font-medium">{t('festivals.qixi')}</div>
+            <div className="text-white/70 text-sm">{currentLanguage.startsWith('zh') ? '七月初七' : 'Aug 22'}</div>
           </div>
           <div className="text-white text-2xl font-light">
-            2<span className="text-sm">天</span>
+            2<span className="text-sm">{currentLanguage.startsWith('zh') ? '天' : 'd'}</span>
           </div>
         </div>
       </div>
@@ -250,19 +261,19 @@ const Calendar = () => {
             <div className="w-6 h-6 glass-button rounded mb-1 flex items-center justify-center">
               <div className="w-3 h-3 bg-white/60 rounded"></div>
             </div>
-            <span className="text-white text-xs">月</span>
+            <span className="text-white text-xs">{t('month')}</span>
           </div>
           <div className="flex flex-col items-center">
             <div className="w-6 h-6 glass-button rounded mb-1 flex items-center justify-center">
               <div className="w-3 h-3 bg-white/60 rounded"></div>
             </div>
-            <span className="text-white text-xs">三日</span>
+            <span className="text-white text-xs">{t('week')}</span>
           </div>
           <div className="flex flex-col items-center">
             <div className="w-6 h-6 bg-blue-500 rounded mb-1 flex items-center justify-center text-white text-xs font-bold pulse-glow">
               {new Date().getDate()}
             </div>
-            <span className="text-white text-xs">台历</span>
+            <span className="text-white text-xs">{t('calendar')}</span>
           </div>
         </div>
       </div>

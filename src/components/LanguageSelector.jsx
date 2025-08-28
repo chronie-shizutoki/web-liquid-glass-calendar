@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Globe, Check } from 'lucide-react';
 
 const LanguageSelector = ({ currentLanguage, onLanguageChange }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [menuPosition, setMenuPosition] = useState({ top: 0, right: 0 });
+  const buttonRef = useRef(null);
 
   const languages = [
     { code: 'zh-CN', name: '简体中文', flag: '🇨🇳' },
@@ -16,12 +18,24 @@ const LanguageSelector = ({ currentLanguage, onLanguageChange }) => {
     setIsOpen(false);
   };
 
+  const handleToggleMenu = () => {
+    if (!isOpen && buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      setMenuPosition({
+        top: rect.bottom + 8,
+        right: window.innerWidth - rect.right
+      });
+    }
+    setIsOpen(!isOpen);
+  };
+
   const currentLang = languages.find(lang => lang.code === currentLanguage) || languages[0];
 
   return (
     <div className="relative">
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        ref={buttonRef}
+        onClick={handleToggleMenu}
         className="glass-button p-3 rounded-full flex items-center gap-2"
       >
         <Globe className="h-5 w-5 text-white" />
@@ -31,21 +45,27 @@ const LanguageSelector = ({ currentLanguage, onLanguageChange }) => {
       {isOpen && (
         <>
           {/* 背景遮罩 */}
-          <div 
-            className="fixed inset-0 z-40"
+          <div
+            className="fixed inset-0 z-[9998]"
             onClick={() => setIsOpen(false)}
           ></div>
-          
+
           {/* 语言选择菜单 */}
-          <div className="absolute top-full right-0 mt-2 glass-card rounded-xl p-2 min-w-48 z-50">
+          <div 
+            className="fixed glass-card rounded-xl p-2 min-w-48 z-[9999]"
+            style={{
+              top: `${menuPosition.top}px`,
+              right: `${menuPosition.right}px`
+            }}
+          >
             {languages.map((language) => (
               <button
                 key={language.code}
                 onClick={() => handleLanguageSelect(language.code)}
                 className={`
                   w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all
-                  ${currentLanguage === language.code 
-                    ? 'bg-blue-500/30 text-white' 
+                  ${currentLanguage === language.code
+                    ? 'bg-blue-500/30 text-white'
                     : 'text-white/80 hover:bg-white/10'
                   }
                 `}

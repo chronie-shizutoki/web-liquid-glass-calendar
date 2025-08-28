@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { useLanguage } from './useLanguage.js';
 
 // 农历数据（简化版本）
 const lunarMonths = [
@@ -47,6 +48,9 @@ export const useCalendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [events, setEvents] = useState([]);
+  
+  const { currentLanguage, getTranslations } = useLanguage();
+  const translations = getTranslations();
 
   // 获取月份数据
   const getMonthData = useMemo(() => {
@@ -119,14 +123,18 @@ export const useCalendar = () => {
     const key = `${month}-${day}`;
     
     // 简化的农历计算（实际项目中应使用专门的农历库）
-    const lunarDay = lunarDays[(day - 1) % 30];
-    const lunarMonth = lunarMonths[(month - 1) % 12];
+    const lunarDay = currentLanguage.startsWith('zh') ? lunarDays[(day - 1) % 30] : '';
+    const lunarMonth = currentLanguage.startsWith('zh') ? lunarMonths[(month - 1) % 12] : '';
     
-    // 检查节气
-    const solarTerm = solarTerms[month] && solarTerms[month][day];
+    // 检查节气（仅中文显示）
+    const solarTerm = currentLanguage.startsWith('zh') ? (solarTerms[month] && solarTerms[month][day]) : null;
     
     // 检查传统节日
-    const festival = traditionalFestivals[key];
+    const festivalKey = Object.keys(translations.festivals || {}).find(key => {
+      const festivalDate = traditionalFestivals[`${month}-${day}`];
+      return festivalDate && translations.festivals[key];
+    });
+    const festival = festivalKey ? translations.festivals[festivalKey] : traditionalFestivals[key];
     
     // 检查是否有事件
     const hasEvent = events.some(event => 
@@ -167,7 +175,16 @@ export const useCalendar = () => {
 
   // 格式化月份显示
   const formatMonth = (date) => {
-    return `${date.getFullYear()} / ${date.getMonth() + 1}`;
+    const year = date.getFullYear();
+    const monthIndex = date.getMonth();
+    
+    if (currentLanguage.startsWith('zh')) {
+      return `${year} / ${monthIndex + 1}`;
+    } else if (currentLanguage === 'ja') {
+      return `${year}年 ${monthIndex + 1}月`;
+    } else {
+      return `${translations.months[monthIndex]} ${year}`;
+    }
   };
 
   // 格式化日期显示
@@ -208,10 +225,10 @@ export const useCalendar = () => {
   };
 
   // 星期标题
-  const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
+  const weekDays = translations.weekdays;
 
   // 获取当前月份数据
-  const monthData = useMemo(() => getMonthData(currentDate), [currentDate, getMonthData, events]);
+  const monthData = useMemo(() => getMonthData(currentDate), [currentDate, getMonthData, events, currentLanguage]);
 
   return {
     currentDate,

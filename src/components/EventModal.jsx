@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { X, Calendar, Clock, MapPin, User } from 'lucide-react';
-import { Button } from '@/components/ui/button.jsx';
+import { useLanguage } from '../hooks/useLanguage.js';
 
 const EventModal = ({ isOpen, onClose, onSave, selectedDate, initialEvent = null }) => {
+  const { t, formatDate } = useLanguage();
+  
   const [event, setEvent] = useState({
     title: initialEvent?.title || '',
     description: initialEvent?.description || '',
@@ -66,7 +68,7 @@ const EventModal = ({ isOpen, onClose, onSave, selectedDate, initialEvent = null
         {/* 头部 */}
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-white text-xl font-semibold">
-            {initialEvent ? '编辑事件' : '新建事件'}
+            {initialEvent ? t('editEvent') : t('newEvent')}
           </h2>
           <button
             onClick={onClose}
@@ -81,13 +83,13 @@ const EventModal = ({ isOpen, onClose, onSave, selectedDate, initialEvent = null
           {/* 标题 */}
           <div>
             <label className="block text-white/80 text-sm font-medium mb-2">
-              事件标题
+              {t('eventTitle')}
             </label>
             <input
               type="text"
               value={event.title}
               onChange={(e) => handleChange('title', e.target.value)}
-              placeholder="输入事件标题..."
+              placeholder={t('enterEventTitle')}
               className="w-full glass-card rounded-lg px-4 py-3 text-white placeholder-white/50 border-0 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
             />
           </div>
@@ -97,16 +99,16 @@ const EventModal = ({ isOpen, onClose, onSave, selectedDate, initialEvent = null
             <div>
               <label className="block text-white/80 text-sm font-medium mb-2">
                 <Calendar className="inline h-4 w-4 mr-1" />
-                日期
+                {t('day')}
               </label>
               <div className="glass-card rounded-lg px-4 py-3 text-white">
-                {selectedDate.toLocaleDateString('zh-CN')}
+                {formatDate(selectedDate)}
               </div>
             </div>
             <div>
               <label className="block text-white/80 text-sm font-medium mb-2">
                 <Clock className="inline h-4 w-4 mr-1" />
-                时间
+                {t('eventTime')}
               </label>
               <input
                 type="time"
@@ -121,13 +123,13 @@ const EventModal = ({ isOpen, onClose, onSave, selectedDate, initialEvent = null
           <div>
             <label className="block text-white/80 text-sm font-medium mb-2">
               <MapPin className="inline h-4 w-4 mr-1" />
-              地点
+              {t('eventLocation')}
             </label>
             <input
               type="text"
               value={event.location}
               onChange={(e) => handleChange('location', e.target.value)}
-              placeholder="输入地点..."
+              placeholder={t('enterLocation')}
               className="w-full glass-card rounded-lg px-4 py-3 text-white placeholder-white/50 border-0 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
             />
           </div>
@@ -136,13 +138,13 @@ const EventModal = ({ isOpen, onClose, onSave, selectedDate, initialEvent = null
           <div>
             <label className="block text-white/80 text-sm font-medium mb-2">
               <User className="inline h-4 w-4 mr-1" />
-              参与者
+              {t('eventAttendees')}
             </label>
             <input
               type="text"
               value={event.attendees}
               onChange={(e) => handleChange('attendees', e.target.value)}
-              placeholder="输入参与者..."
+              placeholder={t('enterAttendees')}
               className="w-full glass-card rounded-lg px-4 py-3 text-white placeholder-white/50 border-0 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
             />
           </div>
@@ -150,12 +152,12 @@ const EventModal = ({ isOpen, onClose, onSave, selectedDate, initialEvent = null
           {/* 描述 */}
           <div>
             <label className="block text-white/80 text-sm font-medium mb-2">
-              描述
+              {t('eventDescription')}
             </label>
             <textarea
               value={event.description}
               onChange={(e) => handleChange('description', e.target.value)}
-              placeholder="输入事件描述..."
+              placeholder={t('enterEventDescription')}
               rows={3}
               className="w-full glass-card rounded-lg px-4 py-3 text-white placeholder-white/50 border-0 focus:outline-none focus:ring-2 focus:ring-blue-500/50 resize-none"
             />
@@ -164,7 +166,7 @@ const EventModal = ({ isOpen, onClose, onSave, selectedDate, initialEvent = null
           {/* 颜色选择 */}
           <div>
             <label className="block text-white/80 text-sm font-medium mb-2">
-              颜色标签
+              {t('eventColor')}
             </label>
             <div className="flex gap-2 flex-wrap">
               {colorOptions.map((color) => (
@@ -189,7 +191,7 @@ const EventModal = ({ isOpen, onClose, onSave, selectedDate, initialEvent = null
             onClick={onClose}
             className="flex-1 glass-button py-3 rounded-lg text-white font-medium"
           >
-            取消
+            {t('cancel')}
           </button>
           <button
             onClick={handleSave}
@@ -200,7 +202,7 @@ const EventModal = ({ isOpen, onClose, onSave, selectedDate, initialEvent = null
                 : 'bg-white/20 cursor-not-allowed'
             }`}
           >
-            {initialEvent ? '更新' : '保存'}
+            {initialEvent ? t('update') : t('save')}
           </button>
         </div>
       </div>

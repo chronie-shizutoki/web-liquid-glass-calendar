@@ -76,9 +76,10 @@ export const useStatusBar = () => {
     getNetworkInfo();
   }, []);
 
-  // Format time as HH:MM
+  // Format time as HH:MM based on locale
   const formatTime = (date) => {
-    return date.toLocaleTimeString('en-US', { 
+    const locale = navigator.language || 'en-US';
+    return date.toLocaleTimeString(locale, { 
       hour12: false, 
       hour: '2-digit', 
       minute: '2-digit' 
