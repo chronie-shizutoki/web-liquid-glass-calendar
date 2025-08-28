@@ -26,6 +26,8 @@ export const useCalendar = (weekStart = 'sunday') => {
       // 根据weekStart设置调整第一天
       if (weekStart === 'monday') {
         firstDayOfWeek = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
+      } else if (weekStart === 'saturday') {
+        firstDayOfWeek = (firstDayOfWeek + 1) % 7;
       }
 
       // 获取当月天数
@@ -146,6 +148,8 @@ export const useCalendar = (weekStart = 'sunday') => {
       // 根据weekStart设置调整周开始
       if (weekStart === 'monday') {
         day = day === 0 ? 6 : day - 1;
+      } else if (weekStart === 'saturday') {
+        day = (day + 1) % 7;
       }
       
       startOfWeek.setDate(date.getDate() - day);
@@ -288,8 +292,11 @@ export const useCalendar = (weekStart = 'sunday') => {
   const weekDays = useMemo(() => {
     const days = translations.weekdays;
     if (weekStart === 'monday') {
-      // 将周日移到最后
+      // 将周日移到最后：周一到周日
       return [...days.slice(1), days[0]];
+    } else if (weekStart === 'saturday') {
+      // 将周六移到最前：周六、周日、周一到周五
+      return [days[6], ...days.slice(0, 6)];
     }
     return days;
   }, [translations.weekdays, weekStart]);

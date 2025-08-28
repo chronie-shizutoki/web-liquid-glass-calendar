@@ -192,6 +192,7 @@ const SettingsView = ({
             onChange={(e) => setWeekStart(e.target.value)}
             className="glass-button px-3 py-2 rounded-lg text-white text-sm bg-transparent border border-white/20"
           >
+            <option value="saturday" className="bg-gray-800">{t('saturday')}</option>
             <option value="sunday" className="bg-gray-800">{t('sunday')}</option>
             <option value="monday" className="bg-gray-800">{t('monday')}</option>
           </select>
