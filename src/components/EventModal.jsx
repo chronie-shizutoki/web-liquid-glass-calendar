@@ -27,7 +27,7 @@ const EventModal = ({ isOpen, onClose, onSave, selectedDate, initialEvent = null
     onSave(eventData);
     onClose();
     
-    // 重置表单
+    // Reset the form
     setEvent({
       title: '',
       description: '',
@@ -43,29 +43,75 @@ const EventModal = ({ isOpen, onClose, onSave, selectedDate, initialEvent = null
   };
 
   const colorOptions = [
-    '#4A90E2', // 蓝色
-    '#7B68EE', // 紫色
-    '#FF6B6B', // 红色
-    '#4ECDC4', // 青色
-    '#45B7D1', // 天蓝色
-    '#96CEB4', // 绿色
-    '#FFEAA7', // 黄色
-    '#DDA0DD', // 梅红色
+    // Primary Colors
+    '#000000', // Black
+    '#FFFFFF', // White
+    '#FF0000', // Red
+    '#00FF00', // Lime
+    '#0000FF', // Blue
+    '#FFFF00', // Yellow
+    '#FF00FF', // Magenta
+    '#00FFFF', // Cyan
+
+    // Blue Shades
+    '#4A90E2', // Blue
+    '#45B7D1', // Light Blue
+    '#87CEFA', // Light Sky Blue
+    '#000080', // Navy
+    '#6A5ACD', // Slate Blue
+    '#8A2BE2', // Blue Violet
+
+    // Purple Shades
+    '#7B68EE', // Purple
+    '#800080', // Purple
+    '#DDA0DD', // Plum
+
+    // Red Shades
+    '#FF6B6B', // Red
+    '#FF6347', // Tomato
+    '#FF4500', // Orange Red
+    '#800000', // Maroon
+
+    // Green Shades
+    '#96CEB4', // Green
+    '#008000', // Green
+    '#32CD32', // Lime Green
+    '#90EE90', // Light Green
+    '#7FFFD4', // Aquamarine
+
+    // Yellow and Orange Shades
+    '#FFEAA7', // Yellow
+    '#FFD700', // Gold
+    '#FF8C00', // Dark Orange
+    '#DAA520', // Goldenrod
+    '#F0E68C', // Khaki
+
+    // Brown Shades
+    '#8B4513', // Saddle Brown
+    '#A0522D', // Sienna
+    '#D2691E', // Chocolate
+    '#BC8F8F', // Rosy Brown
+    '#F4A460', // Sandy Brown
+
+    // Pink Shades
+    '#FF1493', // Deep Pink
+    '#FFB6C1', // Light Pink
+    '#FFA07A', // Light Salmon
   ];
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* 背景遮罩 */}
+      {/* Background mask */}
       <div 
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
         onClick={onClose}
       ></div>
       
-      {/* 模态框内容 */}
+      {/* Modal content */}
       <div className="glass-card rounded-2xl p-6 w-full max-w-md relative z-10 max-h-[90vh] overflow-y-auto">
-        {/* 头部 */}
+        {/* Modal header */}
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-white text-xl font-semibold">
             {initialEvent ? t('editEvent') : t('newEvent')}
@@ -78,9 +124,9 @@ const EventModal = ({ isOpen, onClose, onSave, selectedDate, initialEvent = null
           </button>
         </div>
 
-        {/* 表单内容 */}
+        {/* Form content */}
         <div className="space-y-4">
-          {/* 标题 */}
+          {/* Event title */}
           <div>
             <label className="block text-white/80 text-sm font-medium mb-2">
               {t('eventTitle')}
@@ -94,7 +140,7 @@ const EventModal = ({ isOpen, onClose, onSave, selectedDate, initialEvent = null
             />
           </div>
 
-          {/* 日期和时间 */}
+          {/* Event date and time */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-white/80 text-sm font-medium mb-2">
@@ -119,7 +165,7 @@ const EventModal = ({ isOpen, onClose, onSave, selectedDate, initialEvent = null
             </div>
           </div>
 
-          {/* 地点 */}
+          {/* Event location */}
           <div>
             <label className="block text-white/80 text-sm font-medium mb-2">
               <MapPin className="inline h-4 w-4 mr-1" />
@@ -134,7 +180,7 @@ const EventModal = ({ isOpen, onClose, onSave, selectedDate, initialEvent = null
             />
           </div>
 
-          {/* 参与者 */}
+          {/* Event attendees */}
           <div>
             <label className="block text-white/80 text-sm font-medium mb-2">
               <User className="inline h-4 w-4 mr-1" />
@@ -149,7 +195,7 @@ const EventModal = ({ isOpen, onClose, onSave, selectedDate, initialEvent = null
             />
           </div>
 
-          {/* 描述 */}
+          {/* Event description */}
           <div>
             <label className="block text-white/80 text-sm font-medium mb-2">
               {t('eventDescription')}
@@ -163,7 +209,7 @@ const EventModal = ({ isOpen, onClose, onSave, selectedDate, initialEvent = null
             />
           </div>
 
-          {/* 颜色选择 */}
+          {/* Event color */}
           <div>
             <label className="block text-white/80 text-sm font-medium mb-2">
               {t('eventColor')}
@@ -185,7 +231,7 @@ const EventModal = ({ isOpen, onClose, onSave, selectedDate, initialEvent = null
           </div>
         </div>
 
-        {/* 底部按钮 */}
+        {/* Bottom buttons */}
         <div className="flex gap-3 mt-6">
           <button
             onClick={onClose}

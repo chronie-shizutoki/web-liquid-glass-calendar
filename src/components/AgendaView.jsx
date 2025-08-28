@@ -13,7 +13,7 @@ const AgendaView = ({
   const [filterType, setFilterType] = useState('all'); // all, today, week, month
   const [sortBy, setSortBy] = useState('date'); // date, title, type
 
-  // 获取过滤后的事件
+  // Get filtered events
   const getFilteredEvents = () => {
     let filteredEvents = [...events];
     const today = new Date();
@@ -36,7 +36,7 @@ const AgendaView = ({
         filteredEvents = getEventsForMonth();
         break;
       default:
-        // 显示未来30天的事件
+        // Show events for the next 30 days
         const futureLimit = new Date(today);
         futureLimit.setDate(today.getDate() + 30);
         filteredEvents = events.filter(event => {
@@ -45,7 +45,7 @@ const AgendaView = ({
         });
     }
 
-    // 排序
+    // Sort events
     filteredEvents.sort((a, b) => {
       switch (sortBy) {
         case 'title':
@@ -62,7 +62,7 @@ const AgendaView = ({
 
   const filteredEvents = getFilteredEvents();
 
-  // 按日期分组事件
+  // Group events by date
   const groupEventsByDate = (events) => {
     const grouped = {};
     events.forEach(event => {
@@ -100,7 +100,7 @@ const AgendaView = ({
 
   return (
     <div className="flex-1 p-4">
-      {/* 日程视图头部 */}
+      {/* Agenda View Header */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-white text-2xl font-light">{t('agenda')}</h2>
         <div className="flex gap-2">
@@ -120,7 +120,7 @@ const AgendaView = ({
         </div>
       </div>
 
-      {/* 统计信息 */}
+      {/* Statistics */}
       <div className="grid grid-cols-3 gap-4 mb-6">
         <div className="glass-card rounded-xl p-4 text-center">
           <div className="text-white text-2xl font-light mb-1">
@@ -152,7 +152,7 @@ const AgendaView = ({
         </div>
       </div>
 
-      {/* 事件列表 */}
+      {/* Event List */}
       <div className="space-y-4">
         {Object.keys(groupedEvents).length > 0 ? (
           Object.entries(groupedEvents).map(([dateKey, dayEvents]) => {
@@ -160,7 +160,7 @@ const AgendaView = ({
             
             return (
               <div key={dateKey} className="glass-card rounded-2xl p-4">
-                {/* 日期标题 */}
+                {/* Date Header */}
                 <div className="flex items-center gap-3 mb-4 pb-3 border-b border-white/10">
                   <div className={`
                     w-12 h-12 rounded-xl flex items-center justify-center text-lg font-medium
@@ -202,7 +202,7 @@ const AgendaView = ({
                   )}
                 </div>
 
-                {/* 事件列表 */}
+                {/* Event List */}
                 <div className="space-y-3">
                   {dayEvents.map((event, index) => (
                     <div

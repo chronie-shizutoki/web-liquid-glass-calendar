@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
 
-// 从语言文件中导入翻译
+// Import translations from language files
 import { translations, availableLanguages } from './languages/index.js';
 export const useLanguage = () => {
   const [currentLanguage, setCurrentLanguage] = useState(() => {
-    // 从本地存储获取语言设置，或使用浏览器语言
+    // Get language settings from local storage, or use browser language
     const savedLanguage = localStorage.getItem('calendar-language');
     if (savedLanguage && translations[savedLanguage]) {
       return savedLanguage;
     }
     
-    // 检测浏览器语言
+    // Detect browser language
     const browserLanguage = navigator.language || navigator.userLanguage;
     if (browserLanguage.startsWith('zh')) {
       return browserLanguage.includes('TW') || browserLanguage.includes('HK') ? 'zh-TW' : 'zh-CN';
@@ -21,12 +21,12 @@ export const useLanguage = () => {
     }
   });
 
-  // 保存语言设置到本地存储
+  // Save language settings to local storage
   useEffect(() => {
     localStorage.setItem('calendar-language', currentLanguage);
   }, [currentLanguage]);
 
-  // 获取翻译文本
+  // Get translation text
   const t = (key, fallback = key) => {
     const keys = key.split('.');
     let value = translations[currentLanguage];
@@ -42,19 +42,19 @@ export const useLanguage = () => {
     return typeof value === 'string' ? value : fallback;
   };
 
-  // 获取当前语言的翻译对象
+  // Get translation object for the current language
   const getTranslations = () => {
     return translations[currentLanguage] || translations['zh-CN'];
   };
 
-  // 切换语言
+  // Switch language
   const changeLanguage = (languageCode) => {
     if (translations[languageCode]) {
       setCurrentLanguage(languageCode);
     }
   };
 
-  // 格式化日期
+  // Format date
   const formatDate = (date, options = {}) => {
     const defaultOptions = {
       year: 'numeric',
@@ -65,7 +65,7 @@ export const useLanguage = () => {
     return date.toLocaleDateString(currentLanguage, { ...defaultOptions, ...options });
   };
 
-  // 格式化时间
+  // Format time
   const formatTime = (date) => {
     return date.toLocaleTimeString(currentLanguage, {
       hour: '2-digit',

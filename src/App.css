@@ -119,7 +119,7 @@
   }
 }
 
-/* 液态玻璃效果样式 */
+/* Liquid glass effect styles */
 @layer utilities {
   .glass-card {
     background: rgba(255, 255, 255, 0.1);
@@ -239,7 +239,7 @@
     opacity: 1;
   }
   
-  /* 响应式设计 */
+  /* Responsive Design */
   .calendar-container {
     @apply max-w-md mx-auto;
   }
@@ -272,7 +272,7 @@
     }
   }
   
-  /* 触摸设备优化 */
+  /* Touch Device Optimization */
   @media (hover: none) and (pointer: coarse) {
     .date-cell:hover {
       transform: none;
@@ -292,7 +292,7 @@
     }
   }
   
-  /* 高对比度模式支持 */
+  /* High Contrast Mode Support */
   @media (prefers-contrast: high) {
     .glass-card {
       border: 2px solid rgba(255, 255, 255, 0.5);
@@ -305,7 +305,7 @@
     }
   }
   
-  /* 减少动画模式 */
+  /* Reduced Motion Support */  
   @media (prefers-reduced-motion: reduce) {
     .floating-animation,
     .pulse-glow,
@@ -320,7 +320,7 @@
     }
   }
   
-  /* 暗色模式偏好 */
+  /* Dark Mode Preference */
   @media (prefers-color-scheme: dark) {
     .liquid-gradient-bg {
       background: linear-gradient(
@@ -371,7 +371,7 @@
   }
 }
 
-/* 自定义滚动条 */
+/* Custom Scrollbar */  
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -390,14 +390,14 @@
   background: rgba(255, 255, 255, 0.5);
 }
 
-/* 焦点可见性 */
+/* Focus Visibility */
 .glass-button:focus-visible,
 .date-cell:focus-visible {
   outline: 2px solid rgba(74, 144, 226, 0.8);
   outline-offset: 2px;
 }
 
-/* 选择文本样式 */
+/* Selection Text Style */
 ::selection {
   background: rgba(74, 144, 226, 0.3);
   color: white;

@@ -1,13 +1,13 @@
 import { Lunar, Solar, LunarMonth } from 'lunar-javascript';
 
-// 支持的国家/地区代码
+// Supported country/region codes
 const REGIONS = {
-  CN: 'CN', // 中国大陆
-  TW: 'TW', // 台湾
-  JP: 'JP'  // 日本
+  CN: 'CN', // China mainland
+  TW: 'TW', // Taiwan
+  JP: 'JP'  // Japan
 };
 
-// 语言映射
+// Language mapping
 const LANGUAGE_MAP = {
   'zh-CN': 'zh',
   'zh-TW': 'zh',
@@ -15,7 +15,7 @@ const LANGUAGE_MAP = {
   'ja': 'ja'
 };
 
-// 农历月份和日期的多语言映射
+// Lunar month and day names mapping
 const LUNAR_TERMS = {
   'zh-CN': {
     monthNames: ['正', '二', '三', '四', '五', '六', '七', '八', '九', '十', '冬', '腊'],
@@ -48,10 +48,10 @@ const LUNAR_TERMS = {
 };
 
 /**
- * 公历转农历
- * @param {Date} date - 公历日期
- * @param {string} language - 语言代码
- * @returns {Object} 农历信息对象
+ * Convert solar date to lunar date
+ * @param {Date} date - Solar date
+ * @param {string} language - Language code
+ * @returns {Object} Lunar information object
  */
 export const solarToLunar = (date, language = 'zh-CN') => {
   const solar = Solar.fromDate(date);
@@ -60,21 +60,21 @@ export const solarToLunar = (date, language = 'zh-CN') => {
   const lang = LANGUAGE_MAP[language] || 'zh';
   const currentLanguage = language || 'zh-CN';
   
-  // 获取农历月份对象来判断是否闰月
+  // Get the lunar month object to determine if it's a leap month
   const lunarMonth = LunarMonth.fromYm(lunar.getYear(), lunar.getMonth());
   
-  // 获取对应语言的农历月份和日期名称
+  // Get the lunar month and day names in the corresponding language
   let monthIndex = lunar.getMonth() - 1;
   const dayIndex = lunar.getDay() - 1;
   
   let lunarMonthName, lunarDayName;
   
-  // 确保语言存在于映射表中，如果不存在则使用默认的中文
+  // Ensure the language exists in the mapping table. If not, use Chinese by default.
   if (LUNAR_TERMS[currentLanguage]) {
     const terms = LUNAR_TERMS[currentLanguage];
     lunarMonthName = terms.monthNames[monthIndex];
     
-    // 修复日期名称处理 - 确保日期索引在有效范围内
+    // Fix date name handling - ensure the date index is within the valid range.
     const safeDayIndex = Math.max(0, Math.min(29, dayIndex));
     lunarDayName = terms.dayNames[safeDayIndex];
     
@@ -92,7 +92,7 @@ export const solarToLunar = (date, language = 'zh-CN') => {
     lunarDayName = lunar.getDayInChinese();
   }
   
-  // 根据不同语言构建完整的农历日期字符串
+  // Build the complete lunar date string according to different languages
   let fullString;
   
   switch (currentLanguage) {
@@ -130,11 +130,11 @@ export const solarToLunar = (date, language = 'zh-CN') => {
 };
 
 /**
- * 获取指定日期的节假日信息
- * @param {Date} date - 日期
- * @param {string} language - 语言代码
- * @param {string} region - 地区代码
- * @returns {Array} 节假日数组
+ * Get holiday information for a specified date
+ * @param {Date} date - Date
+ * @param {string} language - Language code
+ * @param {string} region - Region code
+ * @returns {Array} Array of holidays
  */
 export const getFestivalsForDate = (date, language = 'zh-CN', region = 'CN') => {
   const solar = Solar.fromDate(date);
@@ -142,7 +142,7 @@ export const getFestivalsForDate = (date, language = 'zh-CN', region = 'CN') => 
   
   const festivals = [];
   
-  // 获取公历节日
+  // Get solar festivals
   if (solar.getFestivals().length > 0) {
     solar.getFestivals().forEach(festival => {
       festivals.push({
@@ -153,7 +153,7 @@ export const getFestivalsForDate = (date, language = 'zh-CN', region = 'CN') => 
     });
   }
   
-  // 获取农历节日
+  // Get lunar festivals
   if (lunar.getFestivals().length > 0) {
     lunar.getFestivals().forEach(festival => {
       festivals.push({
@@ -164,7 +164,7 @@ export const getFestivalsForDate = (date, language = 'zh-CN', region = 'CN') => 
     });
   }
   
-  // 获取地区特定节假日
+  // Get region-specific holidays
   const regionFestivals = getRegionSpecificHolidays(date, region, language);
   festivals.push(...regionFestivals);
   
@@ -172,16 +172,16 @@ export const getFestivalsForDate = (date, language = 'zh-CN', region = 'CN') => 
 };
 
 /**
- * 获取指定日期的节气
- * @param {Date} date - 日期
- * @param {string} language - 语言代码
- * @returns {string|null} 节气名称
+ * Get the solar term for a specified date
+ * @param {Date} date - Date
+ * @param {string} language - Language code
+ * @returns {string|null} Solar term name
  */
 export const getSolarTermForDate = (date, language = 'zh-CN') => {
   const solar = Solar.fromDate(date);
   const lunar = solar.getLunar();
   
-  // 获取节气信息
+  // Get the solar term information
   const solarTerm = lunar.getJieQi();
   
   if (!solarTerm) return null;
@@ -190,12 +190,12 @@ export const getSolarTermForDate = (date, language = 'zh-CN') => {
 };
 
 /**
- * 获取指定月份的所有节假日
- * @param {number} year - 年份
- * @param {number} month - 月份（1-12）
- * @param {string} language - 语言代码
- * @param {string} region - 地区代码
- * @returns {Array} 节假日数组
+ * Get all holidays for a specified month
+ * @param {number} year - Year
+ * @param {number} month - Month (1-12)
+ * @param {string} language - Language code
+ * @param {string} region - Region code
+ * @returns {Array} Array of holidays
  */
 export const getHolidaysForMonth = (year, month, language = 'zh-CN', region = 'CN') => {
   const holidays = [];
@@ -217,13 +217,13 @@ export const getHolidaysForMonth = (year, month, language = 'zh-CN', region = 'C
 };
 
 /**
- * 翻译节日名称
- * @param {string} festival - 节日名称
- * @param {string} language - 语言代码
- * @returns {string} 翻译后的节日名称
+ * Translate the name of a festival
+ * @param {string} festival - Festival name
+ * @param {string} language - Language code
+ * @returns {string} Translated festival name
  */
 const translateFestival = (festival, language = 'zh-CN') => {
-  // 这里可以根据需要添加更多节日的多语言翻译
+  // Add more festival multi-language translations as needed
   const translations = {
     'zh-CN': {
       '元旦': '元旦',
@@ -283,15 +283,15 @@ const translateFestival = (festival, language = 'zh-CN') => {
     return translations[language][festival];
   }
   
-  // 如果没有找到翻译，返回原名称
+  // If no translation is found, return the original name
   return festival;
 };
 
 /**
- * 翻译节气名称
- * @param {string} solarTerm - 节气名称
- * @param {string} language - 语言代码
- * @returns {string} 翻译后的节气名称
+ * Translate the name of a solar term
+ * @param {string} solarTerm - Solar term name
+ * @param {string} language - Language code
+ * @returns {string} Translated solar term name
  */
 const translateSolarTerm = (solarTerm, language = 'zh-CN') => {
   const translations = {
@@ -409,11 +409,11 @@ const translateSolarTerm = (solarTerm, language = 'zh-CN') => {
 };
 
 /**
- * 获取地区特定的节假日
- * @param {Date} date - 日期
- * @param {string} region - 地区代码
- * @param {string} language - 语言代码
- * @returns {Array} 节假日数组
+ * Get region-specific holidays for a specified date
+ * @param {Date} date - Date
+ * @param {string} region - Region code
+ * @param {string} language - Language code
+ * @returns {Array} Array of region-specific holidays
  */
 const getRegionSpecificHolidays = (date, region, language) => {
   const holidays = [];
@@ -421,13 +421,13 @@ const getRegionSpecificHolidays = (date, region, language) => {
   const month = date.getMonth() + 1;
   const day = date.getDate();
   
-  // 根据地区添加特定节假日
+  // Add region-specific holidays
   switch (region) {
-    case REGIONS.CN: // 中国大陆
-      // 这里可以添加中国大陆特定的节假日
+    case REGIONS.CN: // China
+      // Add region-specific holidays for China
       break;
-    case REGIONS.TW: // 台湾
-      // 台湾特定节假日
+    case REGIONS.TW: // Taiwan
+      // Add region-specific holidays for Taiwan
       if (month === 2 && day === 28) {
         holidays.push({
           name: language === 'zh-TW' ? '和平紀念日' : 'Peace Memorial Day',
@@ -436,8 +436,8 @@ const getRegionSpecificHolidays = (date, region, language) => {
         });
       }
       break;
-    case REGIONS.JP: // 日本
-      // 日本特定节假日
+    case REGIONS.JP: // Japan
+      // Add region-specific holidays for Japan
       if (month === 1 && day === 1) {
         holidays.push({
           name: language === 'ja' ? '元日' : 'New Year\'s Day',
@@ -473,11 +473,11 @@ const getRegionSpecificHolidays = (date, region, language) => {
 };
 
 /**
- * 获取指定日期的详细信息
- * @param {Date} date - 日期
- * @param {string} language - 语言代码
- * @param {string} region - 地区代码
- * @returns {Object} 日期详细信息
+ * Get detailed information for a specified date
+ * @param {Date} date - Date
+ * @param {string} language - Language code
+ * @param {string} region - Region code
+ * @returns {Object} Date details
  */
 export const getDateDetail = (date, language = 'zh-CN', region = 'CN') => {
   const solarInfo = {

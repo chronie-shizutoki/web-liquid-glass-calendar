@@ -1,101 +1,101 @@
-# 局域网服务使用指南
+# Local Network Service Usage Guide
 
-## 🚀 快速启动
+## 🚀 Quick Start
 
-### 开发模式（局域网访问）
+### Development Mode (Local Network Access)
 ```bash
-# 启动开发服务器并显示网络信息
+# Start the development server and display network information
 npm run dev:network
-# 或
+# or
 pnpm dev:network
 ```
 
-### 生产预览模式（局域网访问）
+### Production Preview Mode (Local Network Access)
 ```bash
-# 先构建项目
+# Build the project first
 npm run build
 
-# 启动预览服务器并显示网络信息
+# Start the preview server and display network information
 npm run preview:network
-# 或
+# or
 pnpm preview:network
 ```
 
-### 仅查看网络信息
+### View Network Information Only
 ```bash
 npm run network-info
-# 或
+# or
 pnpm network-info
 ```
 
-## 📱 访问方式
+## 📱 Access Methods
 
-### 本地访问
-- `http://localhost:5173` (开发模式)
-- `http://localhost:4173` (预览模式)
+### Local Access
+- `http://localhost:5173` (Development mode)
+- `http://localhost:4173` (Preview mode)
 
-### 局域网访问
-启动服务后，控制台会显示所有可用的局域网地址，例如：
+### Local Network Access
+After starting the service, the console will display all available local network addresses, for example:
 - `http://192.168.1.100:5173`
 - `http://10.0.0.50:5173`
 
-## 🔧 配置说明
+## 🔧 Configuration Instructions
 
-### Vite 配置
-项目已配置为支持局域网访问：
+### Vite Configuration
+The project has been configured to support local network access:
 
 ```javascript
 // vite.config.js
 export default defineConfig({
   server: {
-    host: '0.0.0.0', // 允许外部访问
-    port: 5173,      // 开发服务器端口
+    host: '0.0.0.0', // Allow external access
+    port: 5173,      // Development server port
     strictPort: false,
   },
   preview: {
-    host: '0.0.0.0', // 预览模式也允许外部访问
-    port: 4173,      // 预览服务器端口
+    host: '0.0.0.0', // Also allow external access in preview mode
+    port: 4173,      // Preview server port
     strictPort: false,
   }
 })
 ```
 
-## 🛡️ 安全注意事项
+## 🛡️ Security Notes
 
-1. **防火墙设置**：确保防火墙允许相应端口的访问
-2. **网络环境**：仅在受信任的局域网环境中使用
-3. **生产部署**：生产环境请使用专业的 Web 服务器
+1. **Firewall Settings**: Ensure the firewall allows access to the corresponding ports
+2. **Network Environment**: Use only in trusted local network environments
+3. **Production Deployment**: Use professional web servers for production environments
 
-## 📋 常见问题
+## 📋 Frequently Asked Questions
 
-### Q: 无法通过局域网访问？
-A: 检查以下几点：
-- 设备是否在同一局域网内
-- 防火墙是否阻止了端口访问
-- 网络配置是否正确
+### Q: Unable to access via local network?
+A: Check the following:
+- Are devices on the same local network
+- Is the firewall blocking port access
+- Is the network configuration correct
 
-### Q: 如何在移动设备上访问？
+### Q: How to access on mobile devices?
 A: 
-1. 确保移动设备连接到同一 WiFi 网络
-2. 在移动设备浏览器中输入显示的局域网地址
-3. 可以使用二维码生成器创建快速访问二维码
+1. Ensure mobile device is connected to the same WiFi network
+2. Enter the displayed local network address in the mobile device browser
+3. You can use a QR code generator to create quick access QR codes
 
-### Q: 端口被占用怎么办？
+### Q: What if the port is occupied?
 A: 
-- 配置中设置了 `strictPort: false`，会自动尝试下一个可用端口
-- 也可以手动指定端口：`vite --port 3000 --host 0.0.0.0`
+- `strictPort: false` is set in the configuration, which will automatically try the next available port
+- You can also manually specify a port: `vite --port 3000 --host 0.0.0.0`
 
-## 🎯 使用场景
+## 🎯 Usage Scenarios
 
-- **多设备测试**：在不同设备上测试应用响应式设计
-- **团队协作**：团队成员可以通过局域网访问开发中的应用
-- **演示展示**：向客户或同事展示应用功能
-- **移动端调试**：在真实移动设备上调试应用
+- **Multi-device testing**: Test application responsive design on different devices
+- **Team collaboration**: Team members can access the developing application via local network
+- **Demonstrations**: Show application features to clients or colleagues
+- **Mobile debugging**: Debug applications on real mobile devices
 
-## 📞 技术支持
+## 📞 Technical Support
 
-如果遇到网络配置问题，请检查：
-1. 网络连接状态
-2. 防火墙和安全软件设置
-3. 路由器配置
-4. 操作系统网络权限
+If you encounter network configuration issues, please check:
+1. Network connection status
+2. Firewall and security software settings
+3. Router configuration
+4. Operating system network permissions

@@ -34,7 +34,7 @@ const SettingsView = ({
   const [darkMode, setDarkMode] = useState(true);
   const [icsUrl, setIcsUrl] = useState('');
 
-  // 导出事件数据（JSON格式）
+  // Export event data (JSON format)
   const exportEventsAsJson = () => {
     const dataStr = JSON.stringify(events, null, 2);
     const dataBlob = new Blob([dataStr], { type: 'application/json' });
@@ -46,7 +46,7 @@ const SettingsView = ({
     URL.revokeObjectURL(url);
   };
   
-  // 导出事件数据（ICS格式）
+  // Export event data (ICS format)
   const exportEventsAsIcs = () => {
     const icsContent = convertEventsToIcs(events);
     const dataBlob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
@@ -58,7 +58,7 @@ const SettingsView = ({
     URL.revokeObjectURL(url);
   };
 
-  // 导入事件数据（JSON格式）
+  // Import event data (JSON format)
   const importEventsFromJson = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -81,7 +81,7 @@ const SettingsView = ({
     }
   };
   
-  // 导入事件数据（ICS格式）
+  // Import event data (ICS format)
   const importEventsFromIcs = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -94,39 +94,39 @@ const SettingsView = ({
           });
           alert(t('importSuccess'));
         } catch (error) {
-          console.error('ICS导入错误:', error);
-          alert(t('importFailedFormat') || 'ICS导入失败，请检查文件格式是否正确');
+          console.error('ICS Import Error:', error);
+          alert(t('importFailedFormat') || 'Failed to import ICS. Please check if the file format is correct.');
         }
       };
       reader.readAsText(file);
-      // 清空文件输入，允许重复选择同一个文件
+      // Clear the file input to allow selecting the same file again
       event.target.value = '';
     }
   };
 
-  // 从URI导入ICS数据
+  // Import ICS data from URI
   const importEventsFromIcsUrl = async () => {
     if (!icsUrl.trim()) {
-      alert(t('emptyUrl') || '请输入有效的ICS URL');
+      alert(t('emptyUrl') || 'Please enter a valid ICS URL');
       return;
     }
 
     try {
-      // 显示加载状态
-      alert(t('importing') || '正在导入ICS数据，请稍候...');
+      // Show loading status
+      alert(t('importing') || 'Importing ICS data, please wait...');
       
-      // 发送请求获取ICS内容
+      // Send request to get ICS content
       const response = await fetch(icsUrl, {
         method: 'GET',
         headers: {
           'Accept': 'text/calendar'
         },
-        // 移除credentials以避免CORS冲突
+        // Remove credentials to avoid CORS issues
         credentials: 'omit'
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP错误: ${response.status}`);
+        throw new Error(`HTTP error: ${response.status}`);
       }
 
       const icsContent = await response.text();
@@ -136,16 +136,16 @@ const SettingsView = ({
         addEvent(event);
       });
 
-      // 清空URL输入框
+      // Clear the URL input box
       setIcsUrl('');
-      alert(t('importSuccess') || 'ICS数据导入成功');
+      alert(t('importSuccess') || 'ICS data imported successfully');
     } catch (error) {
-      console.error('ICS URL导入错误:', error);
-      alert(t('importFailedNetwork') || '从URL导入ICS失败，请检查网络连接和URL是否正确');
+      console.error('ICS URL import error:', error);
+      alert(t('importFailedNetwork') || 'Failed to import ICS from URL. Please check network connection and URL.');
     }
   };
 
-  // 清除所有事件
+  // Clear all events
   const clearAllEvents = () => {
     if (confirm(t('confirmClearAllEvents'))) {
       events.forEach(event => removeEvent(event.id));
@@ -191,13 +191,13 @@ const SettingsView = ({
 
   return (
     <div className="flex-1 p-4">
-      {/* 设置页面头部 */}
+      {/* Settings page header */}
       <div className="mb-6">
         <h2 className="text-white text-2xl font-light mb-2">{t('settings')}</h2>
         <p className="text-white/60 text-sm">{t('settingsTitle')}</p>
       </div>
 
-      {/* 外观设置 */}
+      {/* Appearance settings */}
       <div className="mb-6">
         <h3 className="text-white text-lg font-medium mb-4">{t('appearanceSettings')}</h3>
         
@@ -245,7 +245,7 @@ const SettingsView = ({
         </SettingItem>
       </div>
 
-      {/* 通知设置 */}
+      {/* Notification settings */}
       <div className="mb-6">
         <h3 className="text-white text-lg font-medium mb-4">{t('notificationSettings')}</h3>
         
@@ -258,7 +258,7 @@ const SettingsView = ({
         </SettingItem>
       </div>
 
-      {/* 数据管理 */}
+      {/* Data management */}
       <div className="mb-6">
         <h3 className="text-white text-lg font-medium mb-4">{t('dataManagement')}</h3>
         
@@ -311,13 +311,13 @@ const SettingsView = ({
                 </label>
               </div>
               
-              {/* 从URI导入ICS */}
+              {/* Import ICS from URL */}
               <div className="flex gap-2 w-full items-center">
                 <div className="relative flex-1">
                   <Link2 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60 h-4 w-4" />
                   <input
                     type="text"
-                    placeholder={t('enterIcsUrl') || '输入ICS日历URL'}
+                    placeholder={t('enterIcsUrl') || 'Enter ICS Calendar URL'}
                     value={icsUrl}
                     onChange={(e) => setIcsUrl(e.target.value)}
                     className="glass-button pl-9 pr-3 py-2 rounded-lg text-white text-sm bg-transparent border border-white/20 w-full"
@@ -327,7 +327,7 @@ const SettingsView = ({
                   onClick={importEventsFromIcsUrl}
                   className="glass-button px-4 py-2 rounded-lg text-white text-sm whitespace-nowrap"
                 >
-                  {t('importFromUrl') || '从URL导入'}
+                  {t('importFromUrl') || 'Import from URL'}
                 </button>
               </div>
             </div>
@@ -349,7 +349,7 @@ const SettingsView = ({
         />
       </div>
 
-      {/* 系统信息 */}
+      {/* System information */}
       <div className="mb-6">
         <h3 className="text-white text-lg font-medium mb-4">{t('systemInfo')}</h3>
         
@@ -390,7 +390,7 @@ const SettingsView = ({
         </div>
       </div>
 
-      {/* 关于信息 */}
+      {/* About information */}
       <div className="glass-card rounded-xl p-4 text-center">
         <Info className="h-8 w-8 text-white/60 mx-auto mb-3" />
         <div className="text-white font-medium mb-2">{t('liquidGlassCalendar')}</div>

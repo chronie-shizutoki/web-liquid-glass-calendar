@@ -8,7 +8,7 @@ function getLocalIPs() {
   
   for (const name of Object.keys(interfaces)) {
     for (const interface of interfaces[name]) {
-      // 跳过内部地址和非IPv4地址
+      // Skip internal addresses and non-IPv4 addresses
       if (interface.family === 'IPv4' && !interface.internal) {
         ips.push({
           name: name,
@@ -22,37 +22,37 @@ function getLocalIPs() {
 }
 
 function displayNetworkInfo() {
-  console.log('\n🌐 局域网服务已启动！');
-  console.log('=' .repeat(50));
+  console.log('\n🌐 Local Area Network service has been started!');
+  console.log('='.repeat(50));
   
   const ips = getLocalIPs();
   const port = process.env.PORT || '5173';
   
   if (ips.length === 0) {
-    console.log('❌ 未找到可用的网络接口');
+    console.log('❌ No available network interfaces found');
     return;
   }
   
-  console.log('📱 可通过以下地址访问：');
+  console.log('📱 You can access via the following addresses:');
   console.log('');
   
-  // 本地访问
-  console.log('🏠 本地访问：');
+  // Local access
+  console.log('🏠 Local access:');
   console.log(`   http://localhost:${port}`);
   console.log(`   http://127.0.0.1:${port}`);
   console.log('');
   
-  // 局域网访问
-  console.log('🌐 局域网访问：');
+  // LAN access
+  console.log('🌐 LAN access:');
   ips.forEach(ip => {
     console.log(`   http://${ip.address}:${port} (${ip.name})`);
   });
   
   console.log('');
-  console.log('💡 提示：');
-  console.log('   • 确保设备连接在同一局域网内');
-  console.log('   • 检查防火墙设置是否允许访问');
-  console.log('   • 移动设备可扫描二维码快速访问');
+  console.log('💡 Tips:');
+  console.log('   • Make sure your devices are connected to the same LAN');
+  console.log('   • Check if your firewall settings allow access');
+  console.log('   • Mobile devices can scan the QR code for quick access');
   console.log('');
 }
 

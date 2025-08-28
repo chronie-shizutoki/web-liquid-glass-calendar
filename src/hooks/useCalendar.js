@@ -10,36 +10,36 @@ export const useCalendar = (weekStart = 'sunday') => {
   const { currentLanguage, getTranslations } = useLanguage();
   const translations = getTranslations();
 
-  // 获取月份数据
+  // Get month data
   const getMonthData = useMemo(() => {
     return (date) => {
       const year = date.getFullYear();
       const month = date.getMonth();
 
-      // 获取当月第一天和最后一天
+      // Get first day and last day of the month
       const firstDay = new Date(year, month, 1);
       const lastDay = new Date(year, month + 1, 0);
 
-      // 获取当月第一天是星期几（0=周日，1=周一...）
+      // Get day of the week for the first day (0=Sunday, 1=Monday...)
       let firstDayOfWeek = firstDay.getDay();
       
-      // 根据weekStart设置调整第一天
+      // Adjust the first day based on weekStart
       if (weekStart === 'monday') {
         firstDayOfWeek = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
       } else if (weekStart === 'saturday') {
         firstDayOfWeek = (firstDayOfWeek + 1) % 7;
       }
 
-      // 获取当月天数
+      // Get the number of days in the current month
       const daysInMonth = lastDay.getDate();
 
-      // 获取上个月的最后几天
+      // Get the last few days of the previous month
       const prevMonth = new Date(year, month - 1, 0);
       const daysInPrevMonth = prevMonth.getDate();
 
       const days = [];
 
-      // 添加上个月的最后几天
+      // Add the last few days of the previous month
       for (let i = firstDayOfWeek - 1; i >= 0; i--) {
         const date = daysInPrevMonth - i;
         const fullDate = new Date(year, month - 1, date);
@@ -52,7 +52,7 @@ export const useCalendar = (weekStart = 'sunday') => {
         });
       }
 
-      // 添加当月的所有天
+      // Add all days of the current month
       for (let date = 1; date <= daysInMonth; date++) {
         const fullDate = new Date(year, month, date);
         days.push({
@@ -64,8 +64,8 @@ export const useCalendar = (weekStart = 'sunday') => {
         });
       }
 
-      // 添加下个月的前几天，补齐6行
-      const remainingDays = 42 - days.length; // 6行 * 7天 = 42
+      // Add the first few days of the next month to complete 6 rows
+      const remainingDays = 42 - days.length; // 6 rows * 7 days = 42
       for (let date = 1; date <= remainingDays; date++) {
         const fullDate = new Date(year, month + 1, date);
         days.push({
@@ -81,9 +81,9 @@ export const useCalendar = (weekStart = 'sunday') => {
     };
   }, [weekStart]);
 
-  // 获取日期信息（农历、节气、节日等）
+  // Get date information (lunar calendar, solar terms, festivals, etc.)
   const getDateInfo = (date) => {
-    // 根据当前语言选择地区
+    // Select the region based on the current language
     let region = lunarCalendar.REGIONS.CN;
     if (currentLanguage === 'zh-TW') {
       region = lunarCalendar.REGIONS.TW;
@@ -91,18 +91,18 @@ export const useCalendar = (weekStart = 'sunday') => {
       region = lunarCalendar.REGIONS.JP;
     }
 
-    // 使用lunarCalendar工具获取日期详情
+    // Use the lunarCalendar tool to get date details
     const dateDetail = lunarCalendar.getDateDetail(date, currentLanguage, region);
     
-    // 提取需要的信息
+    // Extract the required information
     const lunarDay = dateDetail.lunar.lunarDayName || '';
     const lunarMonth = dateDetail.lunar.lunarMonthName || '';
     const solarTerm = dateDetail.solarTerm || null;
     
-    // 获取第一个节日作为主要节日显示
+    // Get the first festival as the main festival to display
     const festival = dateDetail.festivals.length > 0 ? dateDetail.festivals[0].name : null;
     
-    // 检查是否有事件
+    // Check if there are any events on this date
     const hasEvent = events.some(event =>
       event && event.date && event.date instanceof Date && 
       !isNaN(event.date.getTime()) &&
@@ -118,36 +118,36 @@ export const useCalendar = (weekStart = 'sunday') => {
     };
   };
 
-  // 检查是否是今天
+  // Check if the date is today
   const isToday = (date) => {
     const today = new Date();
     return date.toDateString() === today.toDateString();
   };
 
-  // 检查是否是选中的日期
+  // Check if the date is selected
   const isSelected = (date) => {
     return date.toDateString() === selectedDate.toDateString();
   };
 
-  // 切换月份
+  // Switch month
   const changeMonth = (increment) => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + increment, 1));
   };
 
-  // 切换周
+  // Switch week
   const changeWeek = (increment) => {
     const newDate = new Date(currentDate);
     newDate.setDate(currentDate.getDate() + (increment * 7));
     setCurrentDate(newDate);
   };
 
-  // 获取周数据
+  // Get week data
   const getWeekData = useMemo(() => {
     return (date) => {
       const startOfWeek = new Date(date);
       let day = startOfWeek.getDay();
       
-      // 根据weekStart设置调整周开始
+      // Adjust the start of the week based on the weekStart setting
       if (weekStart === 'monday') {
         day = day === 0 ? 6 : day - 1;
       } else if (weekStart === 'saturday') {
@@ -172,17 +172,17 @@ export const useCalendar = (weekStart = 'sunday') => {
     };
   }, [weekStart]);
 
-  // 获取当前周数据
+  // Get current week data
   const weekData = useMemo(() => getWeekData(currentDate), [currentDate, getWeekData, events, currentLanguage]);
 
-  // 跳转到今天
+  // Go to today
   const goToToday = () => {
     const today = new Date();
     setCurrentDate(today);
     setSelectedDate(today);
   };
 
-  // 格式化月份显示
+  // Format month display
   const formatMonth = (date) => {
     const year = date.getFullYear();
     const monthIndex = date.getMonth();
@@ -196,7 +196,7 @@ export const useCalendar = (weekStart = 'sunday') => {
     }
   };
 
-  // 格式化日期显示
+  // Format date display
   const formatDate = (date) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -204,38 +204,38 @@ export const useCalendar = (weekStart = 'sunday') => {
     return `${year}-${month}-${day}`;
   };
 
-  // 添加事件
+  // Add event
   const addEvent = (event) => {
     setEvents(prev => [...prev, { ...event, id: Date.now() }]);
   };
 
-  // 删除事件
+  // Delete event
   const removeEvent = (eventId) => {
     setEvents(prev => prev.filter(event => event.id !== eventId));
   };
 
-  // 获取指定日期的事件
+  // Get events for a specific date
   const getEventsForDate = (date) => {
-    // 防御性编程：确保date是有效的Date对象
+    // Defensive programming: ensure date is a valid Date object
     if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
       return [];
     }
     
     return events.filter(event => {
-      // 防御性编程：确保event.date存在且是有效的Date对象
+      // Defensive programming: ensure event.date exists and is a valid Date object
       return event && event.date && event.date instanceof Date && 
              !isNaN(event.date.getTime()) &&
              event.date.toDateString() === date.toDateString();
     });
   };
 
-  // 获取当前月份的所有事件
+  // Get all events for the current month
   const getEventsForMonth = () => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
 
     return events.filter(event => {
-      // 防御性编程：确保event.date存在且是有效的Date对象
+      // Defensive programming: ensure event.date exists and is a valid Date object
       return event && event.date && event.date instanceof Date && 
              !isNaN(event.date.getTime()) &&
              event.date.getFullYear() === year && 
@@ -243,19 +243,19 @@ export const useCalendar = (weekStart = 'sunday') => {
     });
   };
 
-  // 获取即将到来的节日和事件
+  // Get upcoming events
   const getUpcomingEvents = () => {
     const today = new Date();
     const upcomingEvents = [];
     
-    // 检查接下来30天内的节日
+    // Check next 30 days for festivals
     for (let i = 1; i <= 30; i++) {
       const checkDate = new Date(today);
       checkDate.setDate(today.getDate() + i);
       
       const dateInfo = getDateInfo(checkDate);
       
-      // 添加节气
+      // Add solar terms
       if (dateInfo.solarTerm) {
         upcomingEvents.push({
           name: dateInfo.solarTerm,
@@ -266,7 +266,7 @@ export const useCalendar = (weekStart = 'sunday') => {
         });
       }
       
-      // 添加节日
+      // Add festivals
       if (dateInfo.festival) {
         upcomingEvents.push({
           name: dateInfo.festival,
@@ -278,9 +278,9 @@ export const useCalendar = (weekStart = 'sunday') => {
       }
     }
     
-    // 添加用户事件
+    // Add user events
     events.forEach(event => {
-      // 防御性编程：确保event.date存在且是有效的Date对象
+      // Defensive programming: ensure event.date exists and is a valid Date object
       if (!event || !event.date || !(event.date instanceof Date) || isNaN(event.date.getTime())) {
         return;
       }
@@ -300,25 +300,25 @@ export const useCalendar = (weekStart = 'sunday') => {
       }
     });
     
-    // 按天数排序，返回最近的一个
+    // Sort by days until, return the nearest one
     upcomingEvents.sort((a, b) => a.daysUntil - b.daysUntil);
     return upcomingEvents[0] || null;
   };
 
-  // 星期标题 - 根据weekStart调整顺序
+  // Week day titles - adjust order based on weekStart
   const weekDays = useMemo(() => {
     const days = translations.weekdays;
     if (weekStart === 'monday') {
-      // 将周日移到最后：周一到周日
+      // Move Sunday to the end: Mon to Sun
       return [...days.slice(1), days[0]];
     } else if (weekStart === 'saturday') {
-      // 将周六移到最前：周六、周日、周一到周五
+      // Move Saturday to the front: Sat, Sun, Mon to Fri
       return [days[6], ...days.slice(0, 6)];
     }
     return days;
   }, [translations.weekdays, weekStart]);
 
-  // 获取当前月份数据
+  // Get current month data
   const monthData = useMemo(() => getMonthData(currentDate), [currentDate, getMonthData, events, currentLanguage]);
 
   return {

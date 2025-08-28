@@ -20,7 +20,7 @@ const DesktopCalendarView = ({
 
   return (
     <div className="flex-1 p-4">
-      {/* 台历样式头部 */}
+      {/* Desktop calendar header */}
       <div className="glass-card rounded-t-3xl p-6 mb-0 bg-gradient-to-br from-white/20 to-white/5">
         <div className="flex items-center justify-between mb-4">
           <button
@@ -44,7 +44,7 @@ const DesktopCalendarView = ({
           </button>
         </div>
 
-        {/* 今日信息卡片 */}
+        {/* Desktop calendar today card */}
         <div className="glass-card-dark rounded-2xl p-4 text-center">
           <div className="text-white text-4xl font-light mb-2">
             {new Date().getDate()}
@@ -70,9 +70,9 @@ const DesktopCalendarView = ({
         </div>
       </div>
 
-      {/* 台历主体 */}
+      {/* Desktop calendar body */}
       <div className="glass-card rounded-b-3xl rounded-t-none p-6 bg-gradient-to-br from-white/10 to-white/5">
-        {/* 星期标题 */}
+        {/* Desktop calendar week days */}
         <div className="grid grid-cols-7 gap-2 mb-4">
           {weekDays.map((day, index) => (
             <div key={index} className="text-center text-white/70 text-sm py-2 font-medium">
@@ -81,7 +81,7 @@ const DesktopCalendarView = ({
           ))}
         </div>
 
-        {/* 日期网格 - 台历样式 */}
+        {/* Desktop calendar date grid */}
         <div className="grid grid-cols-7 gap-2">
           {monthData.map((day, index) => {
             const dayEvents = getEventsForDate(day.fullDate);
@@ -102,7 +102,7 @@ const DesktopCalendarView = ({
                   ${isToday(day.fullDate) ? 'ring-2 ring-blue-400/50 shadow-blue-400/25' : ''}
                 `}
               >
-                {/* 日期数字 */}
+                {/* Desktop calendar date number */}
                 <div className={`
                   text-lg font-medium mb-1
                   ${isToday(day.fullDate) 
@@ -113,7 +113,7 @@ const DesktopCalendarView = ({
                   {day.date}
                 </div>
                 
-                {/* 农历信息 */}
+                {/* Desktop calendar lunar info */} 
                 {showLunar && day.isCurrentMonth && (
                   <div className={`
                     text-xs mb-1
@@ -126,7 +126,7 @@ const DesktopCalendarView = ({
                   </div>
                 )}
                 
-                {/* 事件指示器 */}
+                {/* Desktop calendar event indicators */}
                 {dayEvents.length > 0 && day.isCurrentMonth && (
                   <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2">
                     <div className="flex justify-center gap-1">
@@ -147,7 +147,7 @@ const DesktopCalendarView = ({
           })}
         </div>
 
-        {/* 选中日期详情 */}
+        {/* Selected Date Details */}
         <div className="mt-6 glass-card-dark rounded-2xl p-4">
           <h3 className="text-white text-lg font-medium mb-3">
             {selectedDate.toLocaleDateString(currentLanguage, { 
@@ -166,7 +166,7 @@ const DesktopCalendarView = ({
             
             return (
               <div className="space-y-3">
-                {/* 农历信息 */}
+                {/* Desktop calendar lunar info */}
                 {showLunar && selectedDayData && (
                   <div className="flex items-center gap-2">
                     <span className="text-white/70 text-sm">{t('lunarInfo')}</span>
@@ -181,7 +181,7 @@ const DesktopCalendarView = ({
                   </div>
                 )}
                 
-                {/* 事件列表 */}
+                {/* Desktop calendar event list */}
                 {selectedDateEvents.length > 0 ? (
                   <div className="space-y-2">
                     <span className="text-white/70 text-sm">{t('todayEvents')}:</span>

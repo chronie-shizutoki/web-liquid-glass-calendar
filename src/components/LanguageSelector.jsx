@@ -45,13 +45,13 @@ const LanguageSelector = ({ currentLanguage, onLanguageChange }) => {
 
       {isOpen && createPortal(
         <>
-          {/* 背景遮罩 */}
+          {/* Background mask */}
           <div
             className="fixed inset-0 z-[999999]"
             onClick={() => setIsOpen(false)}
           ></div>
 
-          {/* 语言选择菜单 */}
+          {/* Language selection menu */}
           <div 
             className="fixed glass-card rounded-xl p-2 min-w-48 z-[999999]"
             style={{

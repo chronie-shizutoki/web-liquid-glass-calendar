@@ -11,7 +11,7 @@ import AgendaView from './AgendaView.jsx';
 import SettingsView from './SettingsView.jsx';
 
 const Calendar = () => {
-  // 设置状态
+  // Set state
   const [showLunar, setShowLunar] = useState(() => {
     const saved = localStorage.getItem('calendar-show-lunar');
     return saved !== null ? JSON.parse(saved) : true;
@@ -55,7 +55,7 @@ const Calendar = () => {
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState(null);
 
-  // 保存设置到localStorage
+  // Save settings to localStorage
   useEffect(() => {
     localStorage.setItem('calendar-show-lunar', JSON.stringify(showLunar));
   }, [showLunar]);
@@ -64,59 +64,57 @@ const Calendar = () => {
     localStorage.setItem('calendar-week-start', weekStart);
   }, [weekStart]);
 
-  // 处理日期点击
+  // Handle date click
   const handleDateClick = (day) => {
     setSelectedDate(day.fullDate);
   };
 
-  // 处理添加事件
+  // Handle add event
   const handleAddEvent = () => {
     setEditingEvent(null);
     setIsEventModalOpen(true);
   };
 
-  // 处理保存事件
+  // Handle save event
   const handleSaveEvent = (eventData) => {
     addEvent(eventData);
   };
 
-  // 获取选中日期的事件
+  // Get events for selected date
   const selectedDateEvents = getEventsForDate(selectedDate);
 
-  // 获取农历信息显示
+  // Get lunar display
   const getLunarDisplay = (day) => {
     if (!showLunar) return '';
     if (day.solarTerm) return day.solarTerm;
     if (day.festival) return day.festival;
     
-    // 根据不同语言正确组合农历月份和日期
+    // Combine lunar month and date correctly according to different languages
     if (currentLanguage === 'en') {
-      // 英语中：月份和日期之间加空格
+      // In English: Add a space between the month and the date
       return `${day.lunarMonth} ${day.lunarDay}`;
     } else if (currentLanguage === 'ja') {
-      // 日语中：月份后已包含"月"字，直接拼接日期
+      // In Japanese: The month already contains the character "月", so directly concatenate the date
       return `${day.lunarMonth}${day.lunarDay}`;
     }
     
-    // 默认中文：直接拼接月份和日期
+    // Default Chinese: Concatenate the month and date directly
     return day.lunarDay;
   };
 
   return (
     <div className="min-h-screen liquid-gradient-bg p-4 relative overflow-hidden">
-      {/* 背景装饰元素 */}
+      {/* Background decoration elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-32 h-32 bg-blue-500/20 rounded-full blur-3xl floating-animation"></div>
         <div className="absolute top-40 right-20 w-24 h-24 bg-purple-500/20 rounded-full blur-2xl floating-animation" style={{ animationDelay: '2s' }}></div>
         <div className="absolute bottom-40 left-20 w-40 h-40 bg-pink-500/20 rounded-full blur-3xl floating-animation" style={{ animationDelay: '4s' }}></div>
       </div>
 
-
-
-      {/* 顶部操作栏 */}
+      {/* Top action bar */}
       {currentView !== 'settings' && (
         <div className="flex justify-between items-center mb-8 px-2 relative z-10">
-          {/* 导航按钮 */}
+          {/* Navigation buttons */}
           <div className="flex items-center gap-2">
             <button
               onClick={() => currentView === 'week' ? changeWeek(-1) : changeMonth(-1)}
@@ -138,7 +136,7 @@ const Calendar = () => {
             </button>
           </div>
 
-          {/* 右侧操作按钮 */}
+          {/* Right action buttons */}
           <div className="flex gap-2">
             <button
               onClick={handleAddEvent}
@@ -160,16 +158,16 @@ const Calendar = () => {
         </div>
       )}
 
-      {/* 主要内容区域 - 根据当前视图显示不同组件 */}
+      {/* Main content area - display different components according to the current view */}
       <div className="flex-1 relative z-10 pb-20">
         {currentView === 'month' && (
           <div>
-            {/* 月份标题 */}
+            {/* Month title */}
             <div className="text-white text-5xl font-light mb-8 px-2 shimmer">
               {formatMonth(currentDate)}
             </div>
 
-            {/* 星期标题 */}
+            {/* Weekday titles */}
             <div className="grid grid-cols-7 gap-1 mb-4 px-2">
               {weekDays.map((day, index) => (
                 <div key={index} className="text-white text-center py-2 text-sm font-medium opacity-80">
@@ -178,7 +176,7 @@ const Calendar = () => {
               ))}
             </div>
 
-            {/* 日历网格 */}
+            {/* Calendar grid */}
             <div className="grid grid-cols-7 gap-1 px-2 mb-8">
               {monthData.map((day, index) => (
                 <div
@@ -202,7 +200,7 @@ const Calendar = () => {
                     </div>
                   )}
 
-                  {/* 事件指示器 */}
+                  {/* Event Indicator */}
                   {day.hasEvent && (
                     <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2">
                       <div className="w-1 h-1 bg-red-400 rounded-full pulse-glow"></div>
@@ -212,9 +210,9 @@ const Calendar = () => {
               ))}
             </div>
 
-            {/* 底部事件卡片 */}
+            {/* Bottom event card */}
             <div className="space-y-4 px-2">
-              {/* 选中日期信息 */}
+              {/* Selected date information */}
               <div className="glass-card rounded-2xl p-4 floating-animation">
                 <div className="text-white text-lg font-medium mb-2">
                   {formatDate(selectedDate, {
@@ -230,7 +228,7 @@ const Calendar = () => {
                   </div>
                 )}
 
-                {/* 当日事件列表 */}
+                {/* Selected date events list */}
                 {selectedDateEvents.length > 0 ? (
                   <div className="space-y-2">
                     {selectedDateEvents.map((event) => (
@@ -258,7 +256,7 @@ const Calendar = () => {
                 )}
               </div>
 
-              {/* 即将到来的事件 */}
+              {/* Upcoming events */}
               {(() => {
                 const upcomingEvent = getUpcomingEvents();
                 if (upcomingEvent) {
@@ -342,10 +340,10 @@ const Calendar = () => {
         )}
       </div>
 
-      {/* 底部导航栏 */}
+      {/* Bottom navigation bar */}
       <div className="fixed bottom-0 left-0 right-0 glass-card-dark border-t border-white/10 z-20">
         <div className="flex justify-around items-center py-3">
-          {/* 月视图 */}
+          {/* Month view */}
           <button
             onClick={() => switchView('month')}
             className="flex flex-col items-center"
@@ -360,7 +358,7 @@ const Calendar = () => {
             </span>
           </button>
 
-          {/* 周视图 */}
+          {/* Week view */}
           <button
             onClick={() => switchView('week')}
             className="flex flex-col items-center"
@@ -375,7 +373,7 @@ const Calendar = () => {
             </span>
           </button>
 
-          {/* 台历视图 */}
+          {/* Desktop view */}
           <button
             onClick={() => switchView('desktop')}
             className="flex flex-col items-center"
@@ -390,7 +388,7 @@ const Calendar = () => {
             </span>
           </button>
 
-          {/* 日程视图 */}
+          {/* Agenda View */}
           <button
             onClick={() => switchView('agenda')}
             className="flex flex-col items-center"
@@ -405,7 +403,7 @@ const Calendar = () => {
             </span>
           </button>
 
-          {/* 设置 */}
+          {/* Settings */}
           <button
             onClick={() => switchView('settings')}
             className="flex flex-col items-center"
@@ -422,7 +420,7 @@ const Calendar = () => {
         </div>
       </div>
 
-      {/* 事件模态框 */}
+      {/* Event modal */}
       <EventModal
         isOpen={isEventModalOpen}
         onClose={() => setIsEventModalOpen(false)}

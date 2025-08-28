@@ -30,7 +30,7 @@ const WeekView = ({
 
   return (
     <div className="flex-1 p-4">
-      {/* 周视图头部 */}
+      {/* Week view header */}
       <div className="flex items-center justify-between mb-6">
         <button
           onClick={() => changeWeek(-1)}
@@ -56,7 +56,7 @@ const WeekView = ({
         </button>
       </div>
 
-      {/* 星期标题 */}
+      {/* Week day titles */}
       <div className="grid grid-cols-7 gap-1 mb-2">
         {weekDays.map((day, index) => (
           <div key={index} className="text-center text-white/70 text-sm py-2">
@@ -65,7 +65,7 @@ const WeekView = ({
         ))}
       </div>
 
-      {/* 周视图日期 */}
+      {/* Week view dates */}
       <div className="grid grid-cols-7 gap-1 mb-6">
         {weekData.map((day, index) => {
           const dayEvents = getEventsForDate(day.fullDate);
@@ -96,7 +96,7 @@ const WeekView = ({
                 </div>
               )}
 
-              {/* 事件指示器 */}
+              {/* Event indicators */}
               {dayEvents.length > 0 && (
                 <div className="flex justify-center gap-1">
                   {dayEvents.slice(0, 3).map((_, eventIndex) => (
@@ -115,7 +115,7 @@ const WeekView = ({
         })}
       </div>
 
-      {/* 时间轴视图 */}
+      {/* Time axis view */}
       <div className="glass-card rounded-2xl p-4">
         <h3 className="text-white text-lg font-medium mb-4">
           {selectedDate.toLocaleDateString(currentLanguage, {
