@@ -5,9 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:network": "node scripts/network-info.js && vite --host 0.0.0.0",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "preview:network": "node scripts/network-info.js && vite preview --host 0.0.0.0",
+    "network-info": "node scripts/network-info.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",

@@ -55,21 +55,44 @@ A beautiful, modern calendar application with a stunning liquid glass design and
 
 3. **Start development server**
    ```bash
+   # 本地开发
    pnpm dev
    # or
    npm run dev
+   
+   # 局域网访问（支持多设备访问）
+   pnpm dev:network
+   # or
+   npm run dev:network
    ```
 
 4. **Open in browser**
-   Navigate to `http://localhost:5173`
+   - 本地访问: `http://localhost:5173`
+   - 局域网访问: 启动后控制台会显示可用的网络地址
 
 ### Build for Production
 
 ```bash
+# 构建项目
 pnpm build
 # or
 npm run build
+
+# 预览构建结果（支持局域网访问）
+pnpm preview:network
+# or
+npm run preview:network
 ```
+
+### 🌐 局域网服务
+
+支持在局域网内多设备访问，适用于：
+- 多设备测试和调试
+- 团队协作开发
+- 移动端真机测试
+- 客户演示展示
+
+详细配置请参考 [NETWORK.md](./NETWORK.md)
 
 ## 🛠️ Tech Stack
 
