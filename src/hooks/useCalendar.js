@@ -385,6 +385,63 @@ export const useCalendar = () => {
     });
   };
 
+  // 获取即将到来的节日和事件
+  const getUpcomingEvents = () => {
+    const today = new Date();
+    const upcomingEvents = [];
+    
+    // 检查接下来30天内的节日
+    for (let i = 1; i <= 30; i++) {
+      const checkDate = new Date(today);
+      checkDate.setDate(today.getDate() + i);
+      
+      const dateInfo = getDateInfo(checkDate);
+      
+      // 添加节气
+      if (dateInfo.solarTerm) {
+        upcomingEvents.push({
+          name: dateInfo.solarTerm,
+          date: new Date(checkDate),
+          daysUntil: i,
+          type: 'solarTerm',
+          lunarDate: currentLanguage.startsWith('zh') ? `${dateInfo.lunarMonth}${dateInfo.lunarDay}` : null
+        });
+      }
+      
+      // 添加节日
+      if (dateInfo.festival) {
+        upcomingEvents.push({
+          name: dateInfo.festival,
+          date: new Date(checkDate),
+          daysUntil: i,
+          type: 'festival',
+          lunarDate: currentLanguage.startsWith('zh') ? `${dateInfo.lunarMonth}${dateInfo.lunarDay}` : null
+        });
+      }
+    }
+    
+    // 添加用户事件
+    events.forEach(event => {
+      const eventDate = new Date(event.date);
+      const diffTime = eventDate - today;
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      
+      if (diffDays > 0 && diffDays <= 30) {
+        upcomingEvents.push({
+          name: event.title,
+          date: eventDate,
+          daysUntil: diffDays,
+          type: 'userEvent',
+          lunarDate: null
+        });
+      }
+    });
+    
+    // 按天数排序，返回最近的一个
+    upcomingEvents.sort((a, b) => a.daysUntil - b.daysUntil);
+    return upcomingEvents[0] || null;
+  };
+
   // 星期标题
   const weekDays = translations.weekdays;
 
@@ -408,7 +465,8 @@ export const useCalendar = () => {
     removeEvent,
     getEventsForDate,
     getEventsForMonth,
-    getDateInfo
+    getDateInfo,
+    getUpcomingEvents
   };
 };
 

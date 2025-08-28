@@ -19,7 +19,8 @@ const Calendar = () => {
     goToToday,
     formatMonth,
     addEvent,
-    getEventsForDate
+    getEventsForDate,
+    getUpcomingEvents
   } = useCalendar();
 
   const {
@@ -140,7 +141,7 @@ const Calendar = () => {
           >
             <Plus className="h-6 w-6 text-white" />
           </button>
-          <LanguageSelector 
+          <LanguageSelector
             currentLanguage={currentLanguage}
             onLanguageChange={changeLanguage}
           />
@@ -243,15 +244,25 @@ const Calendar = () => {
         </div>
 
         {/* 即将到来的事件 */}
-        <div className="glass-card rounded-2xl p-4 flex justify-between items-center floating-animation" style={{ animationDelay: '1s' }}>
-          <div>
-            <div className="text-white text-lg font-medium">{t('festivals.qixi')}</div>
-            <div className="text-white/70 text-sm">{currentLanguage.startsWith('zh') ? '七月初七' : 'Aug 22'}</div>
-          </div>
-          <div className="text-white text-2xl font-light">
-            2<span className="text-sm">{currentLanguage.startsWith('zh') ? '天' : 'd'}</span>
-          </div>
-        </div>
+        {(() => {
+          const upcomingEvent = getUpcomingEvents();
+          if (upcomingEvent) {
+            return (
+              <div className="glass-card rounded-2xl p-4 flex justify-between items-center floating-animation" style={{ animationDelay: '1s' }}>
+                <div>
+                  <div className="text-white text-lg font-medium">{upcomingEvent.name}</div>
+                  <div className="text-white/70 text-sm">
+                    {upcomingEvent.lunarDate || formatDate(upcomingEvent.date)}
+                  </div>
+                </div>
+                <div className="text-white text-2xl font-light">
+                  {upcomingEvent.daysUntil}<span className="text-sm">{currentLanguage.startsWith('zh') ? '天' : 'd'}</span>
+                </div>
+              </div>
+            );
+          }
+          return null;
+        })()}
       </div>
 
       {/* 底部导航栏 */}
