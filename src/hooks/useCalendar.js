@@ -104,6 +104,8 @@ export const useCalendar = (weekStart = 'sunday') => {
     
     // 检查是否有事件
     const hasEvent = events.some(event =>
+      event && event.date && event.date instanceof Date && 
+      !isNaN(event.date.getTime()) &&
       event.date.toDateString() === date.toDateString()
     );
 
@@ -214,9 +216,17 @@ export const useCalendar = (weekStart = 'sunday') => {
 
   // 获取指定日期的事件
   const getEventsForDate = (date) => {
-    return events.filter(event =>
-      event.date.toDateString() === date.toDateString()
-    );
+    // 防御性编程：确保date是有效的Date对象
+    if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
+      return [];
+    }
+    
+    return events.filter(event => {
+      // 防御性编程：确保event.date存在且是有效的Date对象
+      return event && event.date && event.date instanceof Date && 
+             !isNaN(event.date.getTime()) &&
+             event.date.toDateString() === date.toDateString();
+    });
   };
 
   // 获取当前月份的所有事件
@@ -225,9 +235,11 @@ export const useCalendar = (weekStart = 'sunday') => {
     const month = currentDate.getMonth();
 
     return events.filter(event => {
-      const eventYear = event.date.getFullYear();
-      const eventMonth = event.date.getMonth();
-      return eventYear === year && eventMonth === month;
+      // 防御性编程：确保event.date存在且是有效的Date对象
+      return event && event.date && event.date instanceof Date && 
+             !isNaN(event.date.getTime()) &&
+             event.date.getFullYear() === year && 
+             event.date.getMonth() === month;
     });
   };
 
@@ -268,13 +280,18 @@ export const useCalendar = (weekStart = 'sunday') => {
     
     // 添加用户事件
     events.forEach(event => {
+      // 防御性编程：确保event.date存在且是有效的Date对象
+      if (!event || !event.date || !(event.date instanceof Date) || isNaN(event.date.getTime())) {
+        return;
+      }
+      
       const eventDate = new Date(event.date);
       const diffTime = eventDate - today;
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
       
       if (diffDays > 0 && diffDays <= 30) {
         upcomingEvents.push({
-          name: event.title,
+          name: event.title || 'Untitled Event',
           date: eventDate,
           daysUntil: diffDays,
           type: 'userEvent',

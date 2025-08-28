@@ -47,6 +47,7 @@
     "date-fns": "^4.1.0",
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.15.0",
+    "ical.js": "^2.2.1",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.510.0",
     "lunar-javascript": "^1.7.3",

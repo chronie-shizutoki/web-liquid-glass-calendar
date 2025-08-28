@@ -1,4 +1,5 @@
 // ICS格式工具函数
+import ICAL from 'ical.js';
 
 /**
  * 将事件列表转换为ICS格式字符串
@@ -73,71 +74,72 @@ export const convertEventsToIcs = (events) => {
  * @returns {Array} 事件列表
  */
 export const parseIcsToEvents = (icsContent) => {
-  const events = [];
-  const lines = icsContent.split(/\r\n|\n/);
-  
-  let currentEvent = null;
-  let inEvent = false;
-  
-  lines.forEach((line) => {
-    // 处理换行续行（以空格或制表符开头的行）
-    if (line.match(/^[ \t]/)) {
-      if (currentEvent && currentEvent.lastLine) {
-        currentEvent.lastLine += line.substring(1);
-        return;
-      }
-    }
+  try {
+    const jcalData = ICAL.parse(icsContent);
+    const comp = new ICAL.Component(jcalData);
+    const events = comp.getAllSubcomponents('vevent');
     
-    const [key, ...valueParts] = line.split(':');
-    const value = valueParts.join(':').trim();
-    
-    if (key === 'BEGIN' && value === 'VEVENT') {
-      inEvent = true;
-      currentEvent = {
+    return events.map((eventComp, index) => {
+      // 创建事件对象
+      const event = {
         id: generateEventId(),
-        lastLine: null
+        title: '',
+        description: '',
+        location: '',
+        attendees: [],
+        date: new Date() // 默认为当前日期，避免日期为空
       };
-    } else if (key === 'END' && value === 'VEVENT') {
-      inEvent = false;
       
-      // 移除临时属性
-      delete currentEvent.lastLine;
-      
-      // 转换日期格式
-      if (currentEvent.dtstart) {
-        currentEvent.date = parseIcsDate(currentEvent.dtstart);
-        delete currentEvent.dtstart;
+      // 解析事件标题
+      const summary = eventComp.getFirstPropertyValue('summary');
+      if (summary) {
+        event.title = summary;
       }
       
-      events.push(currentEvent);
-    } else if (inEvent && key && value) {
-      switch (key) {
-        case 'SUMMARY':
-          currentEvent.title = value;
-          break;
-        case 'DESCRIPTION':
-          currentEvent.description = value;
-          break;
-        case 'LOCATION':
-          currentEvent.location = value;
-          break;
-        case 'DTSTART':
-          currentEvent.dtstart = value;
-          break;
-        case 'ATTENDEE':
-          if (!currentEvent.attendees) {
-            currentEvent.attendees = [];
-          }
-          currentEvent.attendees.push(value);
-          break;
-        default:
-          // 忽略其他不相关的字段
-          break;
+      // 解析事件描述
+      const description = eventComp.getFirstPropertyValue('description');
+      if (description) {
+        event.description = description;
       }
-    }
-  });
-  
-  return events;
+      
+      // 解析事件地点
+      const location = eventComp.getFirstPropertyValue('location');
+      if (location) {
+        event.location = location;
+      }
+      
+      // 解析参与者
+      const attendeeProps = eventComp.getAllProperties('attendee');
+      if (attendeeProps.length > 0) {
+        event.attendees = attendeeProps.map(prop => {
+          const attendee = prop.getFirstValue();
+          return typeof attendee === 'string' ? attendee : attendee.toString();
+        });
+      }
+      
+      // 解析事件日期
+      const dtstart = eventComp.getFirstProperty('dtstart');
+      if (dtstart) {
+        const dateTime = dtstart.getFirstValue();
+        if (dateTime) {
+          event.date = new Date(dateTime.toJSDate());
+        }
+      }
+      
+      // 确保event.date始终是有效的Date对象
+      if (!(event.date instanceof Date) || isNaN(event.date.getTime())) {
+        event.date = new Date();
+      }
+      
+      return event;
+    }).filter(event => {
+      // 过滤掉无效事件（确保日期存在且有效）
+      return event.date && event.date instanceof Date && !isNaN(event.date.getTime());
+    });
+  } catch (error) {
+    console.error('解析ICS文件失败:', error);
+    return [];
+  }
 };
 
 /**
@@ -154,35 +156,6 @@ const formatIcsDate = (date) => {
   const seconds = String(date.getSeconds()).padStart(2, '0');
   
   return `${year}${month}${day}T${hours}${minutes}${seconds}Z`;
-};
-
-/**
- * 解析ICS格式日期为Date对象
- * @param {string} icsDate - ICS格式日期字符串
- * @returns {Date} Date对象
- */
-const parseIcsDate = (icsDate) => {
-  // 简单解析ISO格式日期，实际应用中可能需要更复杂的解析逻辑
-  if (icsDate.includes('T')) {
-    const [datePart, timePart] = icsDate.split('T');
-    const year = datePart.substring(0, 4);
-    const month = datePart.substring(4, 6) - 1; // 月份从0开始
-    const day = datePart.substring(6, 8);
-    
-    let hours = 0;
-    let minutes = 0;
-    let seconds = 0;
-    
-    if (timePart) {
-      hours = timePart.substring(0, 2);
-      minutes = timePart.substring(2, 4);
-      seconds = timePart.substring(4, 6).replace('Z', '');
-    }
-    
-    return new Date(year, month, day, hours, minutes, seconds);
-  }
-  
-  return new Date(icsDate);
 };
 
 /**
