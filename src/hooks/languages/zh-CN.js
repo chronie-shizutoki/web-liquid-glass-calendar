@@ -111,6 +111,8 @@ export default {
   saturday: '周六',
   eventReminders: '事件提醒',
   enableEventNotifications: '开启事件到期提醒',
+  enterIcsUrl: '输入ics文件URL',
+  importFromUrl: '导入',
   
   // 传统节日
   // 过滤器和统计

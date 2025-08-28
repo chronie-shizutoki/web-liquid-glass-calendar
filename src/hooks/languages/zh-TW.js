@@ -100,6 +100,8 @@ export default {
   setFirstDayOfWeek: '設定一週的第一天',
   eventReminders: '事件提醒',
   enableEventNotifications: '開啟事件到期提醒',
+  enterIcsUrl: '輸入ics文件URL',
+  importFromUrl: '匯入',
   
   // 過濾器和統計
   all: '全部',

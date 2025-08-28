@@ -101,6 +101,8 @@ export default {
   setFirstDayOfWeek: 'Set first day of week',
   eventReminders: 'Event Reminders',
   enableEventNotifications: 'Enable event notifications',
+  enterIcsUrl: 'Enter ICS file URL',
+  importFromUrl: 'Import from URL',
   
   // Filters and statistics
   all: 'All',

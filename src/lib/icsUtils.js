@@ -46,10 +46,16 @@ export const convertEventsToIcs = (events) => {
     }
     
     // 添加参与者
-    if (attendees && attendees.length > 0) {
-      attendees.forEach((attendee) => {
-        icsContent.push(`ATTENDEE:${sanitizeIcsText(attendee)}`);
-      });
+    if (attendees) {
+      // 确保attendees是数组
+      if (Array.isArray(attendees)) {
+        attendees.forEach((attendee) => {
+          icsContent.push(`ATTENDEE:${sanitizeIcsText(attendee)}`);
+        });
+      } else if (typeof attendees === 'string') {
+        // 如果attendees是字符串，直接添加
+        icsContent.push(`ATTENDEE:${sanitizeIcsText(attendees)}`);
+      }
     }
     
     icsContent.push('END:VEVENT');

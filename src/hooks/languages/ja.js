@@ -100,6 +100,8 @@ export default {
   setFirstDayOfWeek: '週の最初の日を設定',
   eventReminders: 'イベントリマインダー',
   enableEventNotifications: 'イベント通知を有効にする',
+  enterIcsUrl: 'ICSファイルURLを入力',
+  importFromUrl: 'URLからインポート',
   
   // フィルターと統計
   all: 'すべて',

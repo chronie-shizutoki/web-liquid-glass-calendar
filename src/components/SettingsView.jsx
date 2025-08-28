@@ -11,7 +11,8 @@ import {
   Info,
   Wifi,
   Battery,
-  Smartphone
+  Smartphone,
+  Link2
 } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage.js';
 import LanguageSelector from './LanguageSelector.jsx';
@@ -31,6 +32,7 @@ const SettingsView = ({
   const { t } = useLanguage();
   const [notifications, setNotifications] = useState(true);
   const [darkMode, setDarkMode] = useState(true);
+  const [icsUrl, setIcsUrl] = useState('');
 
   // 导出事件数据（JSON格式）
   const exportEventsAsJson = () => {
@@ -92,10 +94,54 @@ const SettingsView = ({
           });
           alert(t('importSuccess'));
         } catch (error) {
-          alert(t('importFailedFormat'));
+          console.error('ICS导入错误:', error);
+          alert(t('importFailedFormat') || 'ICS导入失败，请检查文件格式是否正确');
         }
       };
       reader.readAsText(file);
+      // 清空文件输入，允许重复选择同一个文件
+      event.target.value = '';
+    }
+  };
+
+  // 从URI导入ICS数据
+  const importEventsFromIcsUrl = async () => {
+    if (!icsUrl.trim()) {
+      alert(t('emptyUrl') || '请输入有效的ICS URL');
+      return;
+    }
+
+    try {
+      // 显示加载状态
+      alert(t('importing') || '正在导入ICS数据，请稍候...');
+      
+      // 发送请求获取ICS内容
+      const response = await fetch(icsUrl, {
+        method: 'GET',
+        headers: {
+          'Accept': 'text/calendar'
+        },
+        // 移除credentials以避免CORS冲突
+        credentials: 'omit'
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP错误: ${response.status}`);
+      }
+
+      const icsContent = await response.text();
+      const importedEvents = parseIcsToEvents(icsContent);
+      
+      importedEvents.forEach(event => {
+        addEvent(event);
+      });
+
+      // 清空URL输入框
+      setIcsUrl('');
+      alert(t('importSuccess') || 'ICS数据导入成功');
+    } catch (error) {
+      console.error('ICS URL导入错误:', error);
+      alert(t('importFailedNetwork') || '从URL导入ICS失败，请检查网络连接和URL是否正确');
     }
   };
 
@@ -243,25 +289,47 @@ const SettingsView = ({
           title={t('importData')}
           description={t('importData')}
           action={
-            <div className="flex gap-2">
-              <label className="glass-button px-4 py-2 rounded-lg text-white text-sm cursor-pointer">
-                {t('importDataJson')}
-                <input
-                  type="file"
-                  accept=".json"
-                  onChange={importEventsFromJson}
-                  className="hidden"
-                />
-              </label>
-              <label className="glass-button px-4 py-2 rounded-lg text-white text-sm cursor-pointer">
-                {t('importDataIcs')}
-                <input
-                  type="file"
-                  accept=".ics,.ical"
-                  onChange={importEventsFromIcs}
-                  className="hidden"
-                />
-              </label>
+            <div className="flex flex-col gap-3 w-full">
+              <div className="flex gap-2 w-full">
+                <label className="glass-button px-4 py-2 rounded-lg text-white text-sm cursor-pointer">
+                  {t('importDataJson')}
+                  <input
+                    type="file"
+                    accept=".json"
+                    onChange={importEventsFromJson}
+                    className="hidden"
+                  />
+                </label>
+                <label className="glass-button px-4 py-2 rounded-lg text-white text-sm cursor-pointer">
+                  {t('importDataIcs')}
+                  <input
+                    type="file"
+                    accept=".ics,.ical"
+                    onChange={importEventsFromIcs}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+              
+              {/* 从URI导入ICS */}
+              <div className="flex gap-2 w-full items-center">
+                <div className="relative flex-1">
+                  <Link2 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60 h-4 w-4" />
+                  <input
+                    type="text"
+                    placeholder={t('enterIcsUrl') || '输入ICS日历URL'}
+                    value={icsUrl}
+                    onChange={(e) => setIcsUrl(e.target.value)}
+                    className="glass-button pl-9 pr-3 py-2 rounded-lg text-white text-sm bg-transparent border border-white/20 w-full"
+                  />
+                </div>
+                <button
+                  onClick={importEventsFromIcsUrl}
+                  className="glass-button px-4 py-2 rounded-lg text-white text-sm whitespace-nowrap"
+                >
+                  {t('importFromUrl') || '从URL导入'}
+                </button>
+              </div>
             </div>
           }
         />
