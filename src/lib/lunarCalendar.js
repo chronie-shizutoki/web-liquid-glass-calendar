@@ -15,6 +15,38 @@ const LANGUAGE_MAP = {
   'ja': 'ja'
 };
 
+// 农历月份和日期的多语言映射
+const LUNAR_TERMS = {
+  'zh-CN': {
+    monthNames: ['正', '二', '三', '四', '五', '六', '七', '八', '九', '十', '冬', '腊'],
+    dayNames: ['初一', '初二', '初三', '初四', '初五', '初六', '初七', '初八', '初九', '初十',
+              '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十',
+              '廿一', '廿二', '廿三', '廿四', '廿五', '廿六', '廿七', '廿八', '廿九', '三十'],
+    leap: '闰'
+  },
+  'zh-TW': {
+    monthNames: ['正', '二', '三', '四', '五', '六', '七', '八', '九', '十', '冬', '臘'],
+    dayNames: ['初一', '初二', '初三', '初四', '初五', '初六', '初七', '初八', '初九', '初十',
+              '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十',
+              '廿一', '廿二', '廿三', '廿四', '廿五', '廿六', '廿七', '廿八', '廿九', '三十'],
+    leap: '閏'
+  },
+  'en': {
+    monthNames: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+    dayNames: ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th',
+              '11th', '12th', '13th', '14th', '15th', '16th', '17th', '18th', '19th', '20th',
+              '21st', '22nd', '23rd', '24th', '25th', '26th', '27th', '28th', '29th', '30th'],
+    leap: 'Leap '
+  },
+  'ja': {
+    monthNames: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+    dayNames: ['1日', '2日', '3日', '4日', '5日', '6日', '7日', '8日', '9日', '10日',
+              '11日', '12日', '13日', '14日', '15日', '16日', '17日', '18日', '19日', '20日',
+              '21日', '22日', '23日', '24日', '25日', '26日', '27日', '28日', '29日', '30日'],
+    leap: '閏'
+  }
+};
+
 /**
  * 公历转农历
  * @param {Date} date - 公历日期
@@ -26,18 +58,68 @@ export const solarToLunar = (date, language = 'zh-CN') => {
   const lunar = solar.getLunar();
   
   const lang = LANGUAGE_MAP[language] || 'zh';
+  const currentLanguage = language || 'zh-CN';
   
   // 获取农历月份对象来判断是否闰月
   const lunarMonth = LunarMonth.fromYm(lunar.getYear(), lunar.getMonth());
+  
+  // 获取对应语言的农历月份和日期名称
+  const monthIndex = lunar.getMonth() - 1;
+  const dayIndex = lunar.getDay() - 1;
+  
+  let lunarMonthName, lunarDayName;
+  
+  // 确保语言存在于映射表中，如果不存在则使用默认的中文
+  if (LUNAR_TERMS[currentLanguage]) {
+    const terms = LUNAR_TERMS[currentLanguage];
+    
+    // 处理月份名称（包括闰月）
+    if (lunarMonth.isLeap()) {
+      lunarMonthName = terms.leap + terms.monthNames[monthIndex];
+    } else {
+      lunarMonthName = terms.monthNames[monthIndex];
+    }
+    
+    // 处理日期名称
+    lunarDayName = terms.dayNames[dayIndex] || lunar.getDayInChinese();
+  } else {
+    // 默认使用中文
+    lunarMonthName = lunar.getMonthInChinese();
+    lunarDayName = lunar.getDayInChinese();
+  }
+  
+  // 根据不同语言构建完整的农历日期字符串
+  let fullString;
+  
+  switch (currentLanguage) {
+    case 'zh-CN':
+    case 'zh-TW':
+      fullString = `${lunar.getYear()}年${lunarMonthName}月${lunarDayName}`;
+      break;
+    case 'en':
+      fullString = `${lunarMonthName} Month ${lunarDayName}, ${lunar.getYear()}`;
+      if (lunarMonth.isLeap()) {
+        fullString = `Leap ${fullString}`;
+      }
+      break;
+    case 'ja':
+      fullString = `${lunar.getYear()}年${lunarMonthName}月${lunarDayName}`;
+      if (lunarMonth.isLeap()) {
+        fullString = `閏${fullString}`;
+      }
+      break;
+    default:
+      fullString = lang === 'zh' ? lunar.toString() : lunar.toFullString();
+  }
   
   return {
     year: lunar.getYear(),
     month: lunar.getMonth(),
     day: lunar.getDay(),
     isLeapMonth: lunarMonth.isLeap(),
-    lunarMonthName: lunar.getMonthInChinese(),
-    lunarDayName: lunar.getDayInChinese(),
-    fullString: lang === 'zh' ? lunar.toString() : lunar.toFullString(),
+    lunarMonthName: lunarMonthName,
+    lunarDayName: lunarDayName,
+    fullString: fullString,
     festivals: getFestivalsForDate(date, language),
     solarTerm: getSolarTermForDate(date, language)
   };
