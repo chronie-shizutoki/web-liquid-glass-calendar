@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // 语言包
 const translations = {
@@ -22,7 +22,11 @@ const translations = {
     weekStartMonday: '周一',
     notifications: '事件提醒',
     exportData: '导出数据',
+    exportDataIcs: '导出为ICS文件',
+    exportDataJson: '导出为JSON文件',
     importData: '导入数据',
+    importDataIcs: '导入ICS文件',
+    importDataJson: '导入JSON文件',
     clearData: '清除数据',
     export: '导出',
     import: '导入',
@@ -90,6 +94,8 @@ const translations = {
     noEvents: '暂无事件',
     loading: '加载中...',
     error: '出错了',
+    importSuccess: '事件导入成功！',
+    importFailedFormat: '导入失败，请检查文件格式',
     
     // 设置项
     languageSettings: '语言设置',
@@ -145,7 +151,11 @@ const translations = {
     weekStartMonday: '周一',
     notifications: '事件提醒',
     exportData: '匯出數據',
+    exportDataIcs: '匯出為ICS文件',
+    exportDataJson: '匯出為JSON文件',
     importData: '匯入數據',
+    importDataIcs: '匯入ICS文件',
+    importDataJson: '匯入JSON文件',
     clearData: '清除數據',
     export: '匯出',
     import: '匯入',
@@ -198,10 +208,12 @@ const translations = {
     previousMonth: '上個月',
     nextMonth: '下個月',
     goToToday: '回到今天',
-    
+ // 狀態
     noEvents: '暫無事件',
     loading: '載入中...',
     error: '出錯了',
+    importSuccess: '事件匯入成功！',
+    importFailedFormat: '匯入失敗，請檢查文件格式',
     
     // 設置項
     languageSettings: '語言設置',
@@ -256,7 +268,11 @@ const translations = {
     weekStartMonday: 'Monday',
     notifications: 'Event Reminders',
     exportData: 'Export Data',
+    exportDataIcs: 'Export as ICS File',
+    exportDataJson: 'Export as JSON File',
     importData: 'Import Data',
+    importDataIcs: 'Import ICS File',
+    importDataJson: 'Import JSON File',
     clearData: 'Clear Data',
     export: 'Export',
     import: 'Import',
@@ -311,10 +327,12 @@ const translations = {
     previousMonth: 'Previous Month',
     nextMonth: 'Next Month',
     goToToday: 'Go to Today',
-    
+ // 状态
     noEvents: 'No Events',
     loading: 'Loading...',
     error: 'Error',
+    importSuccess: 'Events imported successfully!',
+    importFailedFormat: 'Import failed, please check the file format',
     
     // Settings items
     languageSettings: 'Language Settings',
@@ -369,7 +387,11 @@ const translations = {
     weekStartMonday: '月曜日',
     notifications: 'イベントリマインダー',
     exportData: 'データをエクスポート',
+    exportDataIcs: 'ICSファイルとしてエクスポート',
+    exportDataJson: 'JSONファイルとしてエクスポート',
     importData: 'データをインポート',
+    importDataIcs: 'ICSファイルをインポート',
+    importDataJson: 'JSONファイルをインポート',
     clearData: 'データを消去',
     export: 'エクスポート',
     import: 'インポート',
@@ -426,6 +448,8 @@ const translations = {
     noEvents: 'イベントなし',
     loading: '読み込み中...',
     error: 'エラー',
+    importSuccess: 'イベントのインポートに成功しました！',
+    importFailedFormat: 'インポートに失敗しました。ファイル形式を確認してください',
     
     // 設定アイテム
     languageSettings: '言語設定',
@@ -462,6 +486,7 @@ const translations = {
   }
 };
 
+// 添加React和useState导入
 export const useLanguage = () => {
   const [currentLanguage, setCurrentLanguage] = useState(() => {
     // 从本地存储获取语言设置，或使用浏览器语言

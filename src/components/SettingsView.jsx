@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage.js';
 import LanguageSelector from './LanguageSelector.jsx';
+import { convertEventsToIcs, parseIcsToEvents } from '../lib/icsUtils.js';
 
 const SettingsView = ({ 
   events, 
@@ -29,8 +30,8 @@ const SettingsView = ({
   const [showLunar, setShowLunar] = useState(true);
   const [weekStart, setWeekStart] = useState('sunday');
 
-  // 导出事件数据
-  const exportEvents = () => {
+  // 导出事件数据（JSON格式）
+  const exportEventsAsJson = () => {
     const dataStr = JSON.stringify(events, null, 2);
     const dataBlob = new Blob([dataStr], { type: 'application/json' });
     const url = URL.createObjectURL(dataBlob);
@@ -40,9 +41,21 @@ const SettingsView = ({
     link.click();
     URL.revokeObjectURL(url);
   };
+  
+  // 导出事件数据（ICS格式）
+  const exportEventsAsIcs = () => {
+    const icsContent = convertEventsToIcs(events);
+    const dataBlob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `calendar-events-${new Date().toISOString().split('T')[0]}.ics`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
 
-  // 导入事件数据
-  const importEvents = (event) => {
+  // 导入事件数据（JSON格式）
+  const importEventsFromJson = (event) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -55,9 +68,29 @@ const SettingsView = ({
               date: new Date(event.date)
             });
           });
-          alert('事件导入成功！');
+          alert(t('importSuccess'));
         } catch (error) {
-          alert('导入失败，请检查文件格式');
+          alert(t('importFailedFormat'));
+        }
+      };
+      reader.readAsText(file);
+    }
+  };
+  
+  // 导入事件数据（ICS格式）
+  const importEventsFromIcs = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const importedEvents = parseIcsToEvents(e.target.result);
+          importedEvents.forEach(event => {
+            addEvent(event);
+          });
+          alert(t('importSuccess'));
+        } catch (error) {
+          alert(t('importFailedFormat'));
         }
       };
       reader.readAsText(file);
@@ -185,12 +218,20 @@ const SettingsView = ({
           title={t('exportData')}
           description={`${t('export')} ${events.length} ${t('event')}`}
           action={
-            <button
-              onClick={exportEvents}
-              className="glass-button px-4 py-2 rounded-lg text-white text-sm"
-            >
-              {t('export')}
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={exportEventsAsJson}
+                className="glass-button px-4 py-2 rounded-lg text-white text-sm"
+              >
+                {t('exportDataJson')}
+              </button>
+              <button
+                onClick={exportEventsAsIcs}
+                className="glass-button px-4 py-2 rounded-lg text-white text-sm"
+              >
+                {t('exportDataIcs')}
+              </button>
+            </div>
           }
         />
 
@@ -199,15 +240,26 @@ const SettingsView = ({
           title={t('importData')}
           description={t('importData')}
           action={
-            <label className="glass-button px-4 py-2 rounded-lg text-white text-sm cursor-pointer">
-              {t('import')}
-              <input
-                type="file"
-                accept=".json"
-                onChange={importEvents}
-                className="hidden"
-              />
-            </label>
+            <div className="flex gap-2">
+              <label className="glass-button px-4 py-2 rounded-lg text-white text-sm cursor-pointer">
+                {t('importDataJson')}
+                <input
+                  type="file"
+                  accept=".json"
+                  onChange={importEventsFromJson}
+                  className="hidden"
+                />
+              </label>
+              <label className="glass-button px-4 py-2 rounded-lg text-white text-sm cursor-pointer">
+                {t('importDataIcs')}
+                <input
+                  type="file"
+                  accept=".ics,.ical"
+                  onChange={importEventsFromIcs}
+                  className="hidden"
+                />
+              </label>
+            </div>
           }
         />
 
