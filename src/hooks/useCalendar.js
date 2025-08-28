@@ -327,6 +327,39 @@ export const useCalendar = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + increment, 1));
   };
 
+  // 切换周
+  const changeWeek = (increment) => {
+    const newDate = new Date(currentDate);
+    newDate.setDate(currentDate.getDate() + (increment * 7));
+    setCurrentDate(newDate);
+  };
+
+  // 获取周数据
+  const getWeekData = useMemo(() => {
+    return (date) => {
+      const startOfWeek = new Date(date);
+      const day = startOfWeek.getDay();
+      startOfWeek.setDate(date.getDate() - day);
+      
+      const weekDays = [];
+      for (let i = 0; i < 7; i++) {
+        const currentDay = new Date(startOfWeek);
+        currentDay.setDate(startOfWeek.getDate() + i);
+        weekDays.push({
+          date: currentDay.getDate(),
+          fullDate: new Date(currentDay),
+          isCurrentMonth: currentDay.getMonth() === date.getMonth(),
+          ...getDateInfo(currentDay)
+        });
+      }
+      
+      return weekDays;
+    };
+  }, []);
+
+  // 获取当前周数据
+  const weekData = useMemo(() => getWeekData(currentDate), [currentDate, getWeekData, events, currentLanguage]);
+
   // 跳转到今天
   const goToToday = () => {
     const today = new Date();
@@ -454,10 +487,12 @@ export const useCalendar = () => {
     setSelectedDate,
     events,
     monthData,
+    weekData,
     weekDays,
     isToday,
     isSelected,
     changeMonth,
+    changeWeek,
     goToToday,
     formatMonth,
     formatDate,

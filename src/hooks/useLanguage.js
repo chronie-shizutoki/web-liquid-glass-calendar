@@ -49,6 +49,13 @@ const translations = {
     language: '语言',
     theme: '主题',
     
+    // 视图
+    agenda: '日程',
+    desktop: '台历',
+    
+    // 状态
+    noEvents: '暂无事件',
+    
     // 导航
     previousMonth: '上个月',
     nextMonth: '下个月',
@@ -115,6 +122,10 @@ const translations = {
     language: '語言',
     theme: '主題',
     
+    // 視圖
+    agenda: '日程',
+    desktop: '台曆',
+    
     previousMonth: '上個月',
     nextMonth: '下個月',
     goToToday: '回到今天',
@@ -178,6 +189,12 @@ const translations = {
     language: 'Language',
     theme: 'Theme',
     
+    // Views
+    agenda: 'Agenda',
+    desktop: 'Desktop',
+    
+    noEvents: 'No Events',
+    
     previousMonth: 'Previous Month',
     nextMonth: 'Next Month',
     goToToday: 'Go to Today',
@@ -240,6 +257,10 @@ const translations = {
     settings: '設定',
     language: '言語',
     theme: 'テーマ',
+    
+    // ビュー
+    agenda: 'アジェンダ',
+    desktop: 'デスクトップ',
     
     previousMonth: '前月',
     nextMonth: '翌月',
