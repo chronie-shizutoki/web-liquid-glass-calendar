@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Plus, MoreHorizontal, Settings } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, Settings } from 'lucide-react';
 import { useCalendar } from '../hooks/useCalendar.js';
+import { useStatusBar } from '../hooks/useStatusBar.js';
 import EventModal from './EventModal.jsx';
 
 const Calendar = () => {
@@ -18,6 +19,15 @@ const Calendar = () => {
     addEvent,
     getEventsForDate
   } = useCalendar();
+
+  const {
+    currentTime,
+    batteryLevel,
+    isCharging,
+    networkType,
+    signalStrength,
+    temperature
+  } = useStatusBar();
 
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState(null);
@@ -53,30 +63,38 @@ const Calendar = () => {
       {/* 背景装饰元素 */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-32 h-32 bg-blue-500/20 rounded-full blur-3xl floating-animation"></div>
-        <div className="absolute top-40 right-20 w-24 h-24 bg-purple-500/20 rounded-full blur-2xl floating-animation" style={{animationDelay: '2s'}}></div>
-        <div className="absolute bottom-40 left-20 w-40 h-40 bg-pink-500/20 rounded-full blur-3xl floating-animation" style={{animationDelay: '4s'}}></div>
+        <div className="absolute top-40 right-20 w-24 h-24 bg-purple-500/20 rounded-full blur-2xl floating-animation" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute bottom-40 left-20 w-40 h-40 bg-pink-500/20 rounded-full blur-3xl floating-animation" style={{ animationDelay: '4s' }}></div>
       </div>
 
-      {/* 状态栏模拟 */}
+      {/* 状态栏 - 实时数据 */}
       <div className="flex justify-between items-center text-white text-sm mb-6 px-2 relative z-10">
         <div className="flex items-center gap-1">
-          <span className="font-medium">3:43</span>
-          <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center text-xs pulse-glow">⚡</div>
+          <span className="font-medium">{currentTime}</span>
+          {isCharging && (
+            <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center text-xs pulse-glow">⚡</div>
+          )}
         </div>
         <div className="flex items-center gap-2 text-xs">
-          <span>4.80</span>
+          <span>{temperature}°</span>
           <span>❄️</span>
-          <span>5G</span>
+          <span>{networkType}</span>
           <div className="flex gap-1">
-            <div className="w-1 h-3 bg-white rounded-full"></div>
-            <div className="w-1 h-3 bg-white rounded-full"></div>
-            <div className="w-1 h-3 bg-white rounded-full"></div>
-            <div className="w-1 h-3 bg-white/50 rounded-full"></div>
+            {[1, 2, 3, 4].map((bar) => (
+              <div
+                key={bar}
+                className={`w-1 h-3 rounded-full ${bar <= signalStrength ? 'bg-white' : 'bg-white/30'
+                  }`}
+              ></div>
+            ))}
           </div>
           <div className="w-6 h-3 border border-white rounded-sm relative">
-            <div className="w-4 h-2 bg-white rounded-sm absolute top-0.5 left-0.5"></div>
+            <div
+              className="h-2 bg-white rounded-sm absolute top-0.5 left-0.5 transition-all duration-300"
+              style={{ width: `${Math.max(batteryLevel, 10)}%` }}
+            ></div>
           </div>
-          <span>66%</span>
+          <span className="ml-1">{batteryLevel}%</span>
         </div>
       </div>
 
@@ -84,19 +102,19 @@ const Calendar = () => {
       <div className="flex justify-between items-center mb-8 px-2 relative z-10">
         {/* 月份导航 */}
         <div className="flex items-center gap-2">
-          <button 
+          <button
             onClick={() => changeMonth(-1)}
             className="glass-button p-2 rounded-full"
           >
             <ChevronLeft className="h-5 w-5 text-white" />
           </button>
-          <button 
+          <button
             onClick={() => changeMonth(1)}
             className="glass-button p-2 rounded-full"
           >
             <ChevronRight className="h-5 w-5 text-white" />
           </button>
-          <button 
+          <button
             onClick={goToToday}
             className="glass-button px-4 py-2 rounded-full text-white text-sm"
           >
@@ -106,7 +124,7 @@ const Calendar = () => {
 
         {/* 右侧操作按钮 */}
         <div className="flex gap-4">
-          <button 
+          <button
             onClick={handleAddEvent}
             className="glass-button p-3 rounded-full"
           >
@@ -147,14 +165,13 @@ const Calendar = () => {
             onClick={() => handleDateClick(day)}
           >
             <div className="text-lg font-medium">{day.date}</div>
-            <div className={`text-xs mt-1 ${
-              day.solarTerm ? 'text-yellow-300' : 
-              day.festival ? 'text-red-300' : 
-              'text-white/60'
-            }`}>
+            <div className={`text-xs mt-1 ${day.solarTerm ? 'text-yellow-300' :
+              day.festival ? 'text-red-300' :
+                'text-white/60'
+              }`}>
               {getLunarDisplay(day)}
             </div>
-            
+
             {/* 事件指示器 */}
             {day.hasEvent && (
               <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2">
@@ -170,26 +187,26 @@ const Calendar = () => {
         {/* 选中日期信息 */}
         <div className="glass-card rounded-2xl p-4 floating-animation">
           <div className="text-white text-lg font-medium mb-2">
-            {selectedDate.toLocaleDateString('zh-CN', { 
-              month: 'long', 
+            {selectedDate.toLocaleDateString('zh-CN', {
+              month: 'long',
               day: 'numeric',
               weekday: 'long'
             })}
           </div>
           <div className="text-white/70 text-sm mb-3">
-            {monthData.find(day => day.fullDate.toDateString() === selectedDate.toDateString())?.lunarMonth || '七月'} 
+            {monthData.find(day => day.fullDate.toDateString() === selectedDate.toDateString())?.lunarMonth || '七月'}
             {monthData.find(day => day.fullDate.toDateString() === selectedDate.toDateString())?.lunarDay || '初五'}
           </div>
-          
+
           {/* 当日事件列表 */}
           {selectedDateEvents.length > 0 ? (
             <div className="space-y-2">
               {selectedDateEvents.map((event) => (
-                <div 
+                <div
                   key={event.id}
                   className="flex items-center gap-3 p-2 glass-card rounded-lg"
                 >
-                  <div 
+                  <div
                     className="w-3 h-3 rounded-full"
                     style={{ backgroundColor: event.color }}
                   ></div>
@@ -215,7 +232,7 @@ const Calendar = () => {
         </div>
 
         {/* 即将到来的事件 */}
-        <div className="glass-card rounded-2xl p-4 flex justify-between items-center floating-animation" style={{animationDelay: '1s'}}>
+        <div className="glass-card rounded-2xl p-4 flex justify-between items-center floating-animation" style={{ animationDelay: '1s' }}>
           <div>
             <div className="text-white text-lg font-medium">七夕</div>
             <div className="text-white/70 text-sm">七月初七</div>
