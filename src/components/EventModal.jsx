@@ -43,60 +43,151 @@ const EventModal = ({ isOpen, onClose, onSave, selectedDate, initialEvent = null
   };
 
   const colorOptions = [
-    // Primary Colors
-    '#000000', // Black
-    '#FFFFFF', // White
-    '#FF0000', // Red
-    '#00FF00', // Lime
-    '#0000FF', // Blue
-    '#FFFF00', // Yellow
-    '#FF00FF', // Magenta
-    '#00FFFF', // Cyan
+            // Primary Colors
+            '#000000', // Black
+            '#FFFFFF', // White
+            '#FF0000', // Red
+            '#00FF00', // Lime
+            '#0000FF', // Blue
+            '#FFFF00', // Yellow
+            '#FF00FF', // Magenta
+            '#00FFFF', // Cyan
 
-    // Blue Shades
-    '#4A90E2', // Blue
-    '#45B7D1', // Light Blue
-    '#87CEFA', // Light Sky Blue
-    '#000080', // Navy
-    '#6A5ACD', // Slate Blue
-    '#8A2BE2', // Blue Violet
+            // Blue Shades
+            '#4A90E2', // Blue
+            '#45B7D1', // Light Blue
+            '#87CEFA', // Light Sky Blue
+            '#000080', // Navy
+            '#6A5ACD', // Slate Blue
+            '#8A2BE2', // Blue Violet
+            '#1E90FF', // Dodger Blue
+            '#4169E1', // Royal Blue
+            '#0000CD', // Medium Blue
+            '#191970', // Midnight Blue
+            '#4682B4', // Steel Blue
+            '#5F9EA0', // Cadet Blue
+            '#00BFFF', // Deep Sky Blue
+            '#ADD8E6', // Light Blue
+            '#B0C4DE', // Light Steel Blue
+            '#6495ED', // Cornflower Blue
 
-    // Purple Shades
-    '#7B68EE', // Purple
-    '#800080', // Purple
-    '#DDA0DD', // Plum
+            // Purple Shades
+            '#7B68EE', // Purple
+            '#800080', // Purple
+            '#DDA0DD', // Plum
+            '#9370DB', // Medium Purple
+            '#663399', // Rebecca Purple
+            '#8B008B', // Dark Magenta
+            '#9400D3', // Dark Violet
+            '#9932CC', // Dark Orchid
+            '#BA55D3', // Medium Orchid
+            '#DA70D6', // Orchid
+            '#EE82EE', // Violet
+            '#D8BFD8', // Thistle
+            '#E6E6FA', // Lavender
 
-    // Red Shades
-    '#FF6B6B', // Red
-    '#FF6347', // Tomato
-    '#FF4500', // Orange Red
-    '#800000', // Maroon
+            // Red Shades
+            '#FF6B6B', // Red
+            '#FF6347', // Tomato
+            '#FF4500', // Orange Red
+            '#800000', // Maroon
+            '#8B0000', // Dark Red
+            '#DC143C', // Crimson
+            '#B22222', // Fire Brick
+            '#CD5C5C', // Indian Red
+            '#F08080', // Light Coral
+            '#FA8072', // Salmon
+            '#E9967A', // Dark Salmon
+            '#FFA07A', // Light Salmon
 
-    // Green Shades
-    '#96CEB4', // Green
-    '#008000', // Green
-    '#32CD32', // Lime Green
-    '#90EE90', // Light Green
-    '#7FFFD4', // Aquamarine
+            // Green Shades
+            '#96CEB4', // Green
+            '#008000', // Green
+            '#32CD32', // Lime Green
+            '#90EE90', // Light Green
+            '#7FFFD4', // Aquamarine
+            '#00FF7F', // Spring Green
+            '#3CB371', // Medium Sea Green
+            '#2E8B57', // Sea Green
+            '#228B22', // Forest Green
+            '#006400', // Dark Green
+            '#9ACD32', // Yellow Green
+            '#6B8E23', // Olive Drab
+            '#556B2F', // Dark Olive Green
+            '#66CDAA', // Medium Aquamarine
+            '#8FBC8F', // Dark Sea Green
+            '#20B2AA', // Light Sea Green
+            '#008B8B', // Dark Cyan
+            '#008080', // Teal
 
-    // Yellow and Orange Shades
-    '#FFEAA7', // Yellow
-    '#FFD700', // Gold
-    '#FF8C00', // Dark Orange
-    '#DAA520', // Goldenrod
-    '#F0E68C', // Khaki
+            // Yellow and Orange Shades
+            '#FFEAA7', // Yellow
+            '#FFD700', // Gold
+            '#FF8C00', // Dark Orange
+            '#DAA520', // Goldenrod
+            '#F0E68C', // Khaki
+            '#FFA500', // Orange
+            '#FF7F50', // Coral
+            '#FFDAB9', // Peach Puff
+            '#FFE4B5', // Moccasin
+            '#F0FFF0', // Honeydew
+            '#FAFAD2', // Light Goldenrod Yellow
+            '#FFFFE0', // Light Yellow
+            '#FFFACD', // Lemon Chiffon
+            '#EEE8AA', // Pale Goldenrod
+            '#B8860B', // Dark Goldenrod
 
-    // Brown Shades
-    '#8B4513', // Saddle Brown
-    '#A0522D', // Sienna
-    '#D2691E', // Chocolate
-    '#BC8F8F', // Rosy Brown
-    '#F4A460', // Sandy Brown
+            // Brown Shades
+            '#8B4513', // Saddle Brown
+            '#A0522D', // Sienna
+            '#D2691E', // Chocolate
+            '#BC8F8F', // Rosy Brown
+            '#F4A460', // Sandy Brown
+            '#DEB887', // Burly Wood
+            '#D2B48C', // Tan
+            '#F5DEB3', // Wheat
+            '#A52A2A', // Brown
+            '#CD853F', // Peru
 
-    // Pink Shades
-    '#FF1493', // Deep Pink
-    '#FFB6C1', // Light Pink
-    '#FFA07A', // Light Salmon
+            // Pink Shades
+            '#FF1493', // Deep Pink
+            '#FFB6C1', // Light Pink
+            '#FFC0CB', // Pink
+            '#DB7093', // Pale Violet Red
+            '#C71585', // Medium Violet Red
+            '#FF69B4', // Hot Pink
+
+            // Gray Shades
+            '#808080', // Gray
+            '#A9A9A9', // Dark Gray
+            '#C0C0C0', // Silver
+            '#D3D3D3', // Light Gray
+            '#DCDCDC', // Gainsboro
+            '#F5F5F5', // White Smoke
+            '#696969', // Dim Gray
+            '#778899', // Light Slate Gray
+            '#708090', // Slate Gray
+            '#2F4F4F', // Dark Slate Gray
+
+            // Additional Colors
+            '#F5F5DC', // Beige
+            '#FFEBCD', // Blanched Almond
+            '#FFEFD5', // Papaya Whip
+            '#FDF5E6', // Old Lace
+            '#FFF8DC', // Cornsilk
+            '#FAEBD7', // Antique White
+            '#FFE4C4', // Bisque
+            '#FFE4E1', // Misty Rose
+            '#FFF0F5', // Lavender Blush
+            '#F0F8FF', // Alice Blue
+            '#F8F8FF', // Ghost White
+            '#F0FFFF', // Azure
+            '#E0FFFF', // Light Cyan
+            '#AFEEEE', // Pale Turquoise
+            '#00CED1', // Dark Turquoise
+            '#48D1CC', // Medium Turquoise
+            '#40E0D0', // Turquoise
+            '#F5FFFA'  // Mint Cream
   ];
 
   if (!isOpen) return null;
