@@ -43,7 +43,7 @@ const WeekView = ({
             {formatWeekRange()}
           </h2>
           <p className="text-white/70 text-sm">
-            {currentDate.getFullYear()}年
+            {currentDate.getFullYear()}
           </p>
         </div>
 

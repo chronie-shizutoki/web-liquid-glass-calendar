@@ -113,17 +113,17 @@ const SettingsView = ({
       {/* 设置页面头部 */}
       <div className="mb-6">
         <h2 className="text-white text-2xl font-light mb-2">{t('settings')}</h2>
-        <p className="text-white/60 text-sm">个性化您的日历体验</p>
+        <p className="text-white/60 text-sm">{t('settingsTitle')}</p>
       </div>
 
       {/* 外观设置 */}
       <div className="mb-6">
-        <h3 className="text-white text-lg font-medium mb-4">外观设置</h3>
+        <h3 className="text-white text-lg font-medium mb-4">{t('appearanceSettings')}</h3>
         
         <SettingItem
           icon={Globe}
-          title="语言设置"
-          description="选择界面显示语言"
+          title={t('languageSettings')}
+          description={t('selectInterfaceLanguage')}
         >
           <LanguageSelector 
             currentLanguage={currentLanguage}
@@ -133,44 +133,44 @@ const SettingsView = ({
 
         <SettingItem
           icon={darkMode ? Moon : Sun}
-          title="深色模式"
-          description="切换浅色/深色主题"
+          title={t('darkMode')}
+          description={t('toggleLightDarkTheme')}
         >
           <Toggle checked={darkMode} onChange={setDarkMode} />
         </SettingItem>
 
         <SettingItem
           icon={Calendar}
-          title="显示农历"
-          description="在日历中显示农历信息"
+          title={t('showLunarCalendar')}
+          description={t('displayLunarInfoInCalendar')}
         >
           <Toggle checked={showLunar} onChange={setShowLunar} />
         </SettingItem>
 
         <SettingItem
           icon={Calendar}
-          title="一周开始"
-          description="设置一周的第一天"
+          title={t('weekStartsOn')}
+          description={t('setFirstDayOfWeek')}
         >
           <select
             value={weekStart}
             onChange={(e) => setWeekStart(e.target.value)}
             className="glass-button px-3 py-2 rounded-lg text-white text-sm bg-transparent border border-white/20"
           >
-            <option value="sunday" className="bg-gray-800">周日</option>
-            <option value="monday" className="bg-gray-800">周一</option>
+            <option value="sunday" className="bg-gray-800">{t('sunday')}</option>
+            <option value="monday" className="bg-gray-800">{t('monday')}</option>
           </select>
         </SettingItem>
       </div>
 
       {/* 通知设置 */}
       <div className="mb-6">
-        <h3 className="text-white text-lg font-medium mb-4">通知设置</h3>
+        <h3 className="text-white text-lg font-medium mb-4">{t('notificationSettings')}</h3>
         
         <SettingItem
           icon={Bell}
-          title="事件提醒"
-          description="开启事件到期提醒"
+          title={t('eventReminders')}
+          description={t('enableEventNotifications')}
         >
           <Toggle checked={notifications} onChange={setNotifications} />
         </SettingItem>
@@ -178,29 +178,29 @@ const SettingsView = ({
 
       {/* 数据管理 */}
       <div className="mb-6">
-        <h3 className="text-white text-lg font-medium mb-4">数据管理</h3>
+        <h3 className="text-white text-lg font-medium mb-4">{t('dataManagement')}</h3>
         
         <SettingItem
           icon={Download}
-          title="导出数据"
-          description={`导出 ${events.length} 个事件到文件`}
+          title={t('exportData')}
+          description={`${t('export')} ${events.length} ${t('event')}`}
           action={
             <button
               onClick={exportEvents}
               className="glass-button px-4 py-2 rounded-lg text-white text-sm"
             >
-              导出
+              {t('export')}
             </button>
           }
         />
 
         <SettingItem
           icon={Upload}
-          title="导入数据"
-          description="从文件导入事件数据"
+          title={t('importData')}
+          description={t('importData')}
           action={
             <label className="glass-button px-4 py-2 rounded-lg text-white text-sm cursor-pointer">
-              导入
+              {t('import')}
               <input
                 type="file"
                 accept=".json"
@@ -213,14 +213,14 @@ const SettingsView = ({
 
         <SettingItem
           icon={Trash2}
-          title="清除数据"
-          description="删除所有事件数据"
+          title={t('clearData')}
+          description={t('clearData')}
           action={
             <button
               onClick={clearAllEvents}
               className="glass-button px-4 py-2 rounded-lg text-red-400 text-sm border border-red-400/30"
             >
-              清除
+              {t('clear')}
             </button>
           }
         />
@@ -228,21 +228,21 @@ const SettingsView = ({
 
       {/* 系统信息 */}
       <div className="mb-6">
-        <h3 className="text-white text-lg font-medium mb-4">系统信息</h3>
+        <h3 className="text-white text-lg font-medium mb-4">{t('systemInfo')}</h3>
         
         <div className="glass-card rounded-xl p-4 space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Smartphone className="h-4 w-4 text-white/60" />
-              <span className="text-white/80 text-sm">应用版本</span>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Smartphone className="h-4 w-4 text-white/60" />
+                <span className="text-white/80 text-sm">{t('appVersion')}</span>
+              </div>
+              <span className="text-white text-sm">v1.0.0</span>
             </div>
-            <span className="text-white text-sm">v1.0.0</span>
-          </div>
           
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Calendar className="h-4 w-4 text-white/60" />
-              <span className="text-white/80 text-sm">事件总数</span>
+              <span className="text-white/80 text-sm">{t('totalEvents')}</span>
             </div>
             <span className="text-white text-sm">{events.length}</span>
           </div>
@@ -250,15 +250,15 @@ const SettingsView = ({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Wifi className="h-4 w-4 text-white/60" />
-              <span className="text-white/80 text-sm">网络状态</span>
+              <span className="text-white/80 text-sm">{t('networkStatus')}</span>
             </div>
-            <span className="text-green-400 text-sm">已连接</span>
+            <span className="text-green-400 text-sm">{t('connected')}</span>
           </div>
           
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Battery className="h-4 w-4 text-white/60" />
-              <span className="text-white/80 text-sm">存储使用</span>
+              <span className="text-white/80 text-sm">{t('storageUsage')}</span>
             </div>
             <span className="text-white text-sm">
               {Math.round(JSON.stringify(events).length / 1024)} KB
@@ -270,12 +270,12 @@ const SettingsView = ({
       {/* 关于信息 */}
       <div className="glass-card rounded-xl p-4 text-center">
         <Info className="h-8 w-8 text-white/60 mx-auto mb-3" />
-        <div className="text-white font-medium mb-2">液态玻璃日历</div>
+        <div className="text-white font-medium mb-2">{t('liquidGlassCalendar')}</div>
         <div className="text-white/60 text-sm mb-3">
-          一个现代化的多功能日历应用
+          {t('modernCalendarApp')}
         </div>
         <div className="text-white/40 text-xs">
-          Built with React + Vite + Tailwind CSS
+          {t('builtWith')}
         </div>
       </div>
     </div>
