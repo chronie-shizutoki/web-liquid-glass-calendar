@@ -11,6 +11,8 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  // 配置GitHub Pages的基础路径，确保资源正确加载
+  base: './',
   server: {
     host: '0.0.0.0', // 允许外部访问
     port: 5173,      // 指定端口
