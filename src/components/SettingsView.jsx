@@ -22,13 +22,15 @@ const SettingsView = ({
   addEvent, 
   removeEvent,
   currentLanguage,
-  changeLanguage 
+  changeLanguage,
+  showLunar,
+  setShowLunar,
+  weekStart,
+  setWeekStart
 }) => {
   const { t } = useLanguage();
   const [notifications, setNotifications] = useState(true);
   const [darkMode, setDarkMode] = useState(true);
-  const [showLunar, setShowLunar] = useState(true);
-  const [weekStart, setWeekStart] = useState('sunday');
 
   // 导出事件数据（JSON格式）
   const exportEventsAsJson = () => {

@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { useLanguage } from './useLanguage.js';
 import lunarCalendar from '../lib/lunarCalendar.js';
 
-export const useCalendar = () => {
+export const useCalendar = (weekStart = 'sunday') => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [events, setEvents] = useState([]);
@@ -21,7 +21,12 @@ export const useCalendar = () => {
       const lastDay = new Date(year, month + 1, 0);
 
       // 获取当月第一天是星期几（0=周日，1=周一...）
-      const firstDayOfWeek = firstDay.getDay();
+      let firstDayOfWeek = firstDay.getDay();
+      
+      // 根据weekStart设置调整第一天
+      if (weekStart === 'monday') {
+        firstDayOfWeek = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
+      }
 
       // 获取当月天数
       const daysInMonth = lastDay.getDate();
@@ -72,7 +77,7 @@ export const useCalendar = () => {
 
       return days;
     };
-  }, []);
+  }, [weekStart]);
 
   // 获取日期信息（农历、节气、节日等）
   const getDateInfo = (date) => {
@@ -136,7 +141,13 @@ export const useCalendar = () => {
   const getWeekData = useMemo(() => {
     return (date) => {
       const startOfWeek = new Date(date);
-      const day = startOfWeek.getDay();
+      let day = startOfWeek.getDay();
+      
+      // 根据weekStart设置调整周开始
+      if (weekStart === 'monday') {
+        day = day === 0 ? 6 : day - 1;
+      }
+      
       startOfWeek.setDate(date.getDate() - day);
       
       const weekDays = [];
@@ -153,7 +164,7 @@ export const useCalendar = () => {
       
       return weekDays;
     };
-  }, []);
+  }, [weekStart]);
 
   // 获取当前周数据
   const weekData = useMemo(() => getWeekData(currentDate), [currentDate, getWeekData, events, currentLanguage]);
@@ -273,8 +284,15 @@ export const useCalendar = () => {
     return upcomingEvents[0] || null;
   };
 
-  // 星期标题
-  const weekDays = translations.weekdays;
+  // 星期标题 - 根据weekStart调整顺序
+  const weekDays = useMemo(() => {
+    const days = translations.weekdays;
+    if (weekStart === 'monday') {
+      // 将周日移到最后
+      return [...days.slice(1), days[0]];
+    }
+    return days;
+  }, [translations.weekdays, weekStart]);
 
   // 获取当前月份数据
   const monthData = useMemo(() => getMonthData(currentDate), [currentDate, getMonthData, events, currentLanguage]);

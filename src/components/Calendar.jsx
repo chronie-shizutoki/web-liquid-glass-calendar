@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon, CalendarDays, CalendarRange, List, Settings } from 'lucide-react';
 import { useCalendar } from '../hooks/useCalendar.js';
 import { useLanguage } from '../hooks/useLanguage.js';
@@ -11,6 +11,17 @@ import AgendaView from './AgendaView.jsx';
 import SettingsView from './SettingsView.jsx';
 
 const Calendar = () => {
+  // 设置状态
+  const [showLunar, setShowLunar] = useState(() => {
+    const saved = localStorage.getItem('calendar-show-lunar');
+    return saved !== null ? JSON.parse(saved) : true;
+  });
+  
+  const [weekStart, setWeekStart] = useState(() => {
+    const saved = localStorage.getItem('calendar-week-start');
+    return saved || 'sunday';
+  });
+
   const {
     currentDate,
     selectedDate,
@@ -30,9 +41,7 @@ const Calendar = () => {
     getEventsForDate,
     getEventsForMonth,
     getUpcomingEvents
-  } = useCalendar();
-
-
+  } = useCalendar(weekStart);
 
   const {
     currentLanguage,
@@ -45,6 +54,15 @@ const Calendar = () => {
 
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState(null);
+
+  // 保存设置到localStorage
+  useEffect(() => {
+    localStorage.setItem('calendar-show-lunar', JSON.stringify(showLunar));
+  }, [showLunar]);
+
+  useEffect(() => {
+    localStorage.setItem('calendar-week-start', weekStart);
+  }, [weekStart]);
 
   // 处理日期点击
   const handleDateClick = (day) => {
@@ -67,6 +85,7 @@ const Calendar = () => {
 
   // 获取农历信息显示
   const getLunarDisplay = (day) => {
+    if (!showLunar) return '';
     if (day.solarTerm) return day.solarTerm;
     if (day.festival) return day.festival;
     return day.lunarDay;
@@ -163,12 +182,14 @@ const Calendar = () => {
                   onClick={() => handleDateClick(day)}
                 >
                   <div className="text-lg font-medium">{day.date}</div>
-                  <div className={`text-xs mt-1 ${day.solarTerm ? 'text-yellow-300' :
-                    day.festival ? 'text-red-300' :
-                      'text-white/60'
-                    }`}>
-                    {getLunarDisplay(day)}
-                  </div>
+                  {showLunar && (
+                    <div className={`text-xs mt-1 ${day.solarTerm ? 'text-yellow-300' :
+                      day.festival ? 'text-red-300' :
+                        'text-white/60'
+                      }`}>
+                      {getLunarDisplay(day)}
+                    </div>
+                  )}
 
                   {/* 事件指示器 */}
                   {day.hasEvent && (
@@ -191,7 +212,7 @@ const Calendar = () => {
                     weekday: 'long'
                   })}
                 </div>
-                {currentLanguage.startsWith('zh') && (
+                {showLunar && currentLanguage.startsWith('zh') && (
                   <div className="text-white/70 text-sm mb-3">
                     {monthData.find(day => day.fullDate.toDateString() === selectedDate.toDateString())?.lunarMonth || '七月'}
                     {monthData.find(day => day.fullDate.toDateString() === selectedDate.toDateString())?.lunarDay || '初五'}
@@ -262,6 +283,8 @@ const Calendar = () => {
             isSelected={isSelected}
             getEventsForDate={getEventsForDate}
             getLunarDisplay={getLunarDisplay}
+            showLunar={showLunar}
+            weekStart={weekStart}
           />
         )}
 
@@ -278,6 +301,8 @@ const Calendar = () => {
             formatMonth={formatMonth}
             getEventsForDate={getEventsForDate}
             getLunarDisplay={getLunarDisplay}
+            showLunar={showLunar}
+            weekStart={weekStart}
           />
         )}
 
@@ -298,6 +323,10 @@ const Calendar = () => {
             removeEvent={removeEvent}
             currentLanguage={currentLanguage}
             changeLanguage={changeLanguage}
+            showLunar={showLunar}
+            setShowLunar={setShowLunar}
+            weekStart={weekStart}
+            setWeekStart={setWeekStart}
           />
         )}
       </div>
