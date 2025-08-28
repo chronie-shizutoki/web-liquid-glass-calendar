@@ -1,0 +1,134 @@
+// 繁體中文語言包
+export default {
+  today: '今天',
+  calendar: '日曆',
+  month: '月',
+  week: '週',
+  day: '日',
+  year: '年',
+  // 設置相關
+  settingsTitle: '個性化您的日曆體驗',
+  appearanceSettings: '外觀設置',
+  notificationSettings: '通知設置',
+  dataManagement: '數據管理',
+  systemInfo: '系統資訊',
+  about: '關於資訊',
+  weekStart: '一週開始',
+  weekStartSunday: '周日',
+  weekStartMonday: '周一',
+  notifications: '事件提醒',
+  exportData: '匯出數據',
+  exportDataIcs: '匯出為ICS文件',
+  exportDataJson: '匯出為JSON文件',
+  importData: '匯入數據',
+  importDataIcs: '匯入ICS文件',
+  importDataJson: '匯入JSON文件',
+  clearData: '清除數據',
+  export: '匯出',
+  import: '匯入',
+  clear: '清除',
+  liquidGlassCalendar: '液態玻璃日曆',
+  modernCalendarApp: '一個現代化的多功能日曆應用',
+  builtWith: '使用 React + Vite + Tailwind CSS 構建',
+  appVersion: '應用版本',
+  totalEvents: '事件總數',
+  networkStatus: '網路狀態',
+  storageUsage: '儲存使用',
+  connected: '已連接',
+  
+  weekdays: ['日', '一', '二', '三', '四', '五', '六'],
+  weekdaysLong: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+  
+  months: ['一月', '二月', '三月', '四月', '五月', '六月', 
+           '七月', '八月', '九月', '十月', '十一月', '十二月'],
+  
+  event: '事件',
+  newEvent: '新建事件',
+  editEvent: '編輯事件',
+  eventTitle: '事件標題',
+  eventDescription: '事件描述',
+  eventTime: '時間',
+  eventLocation: '地點',
+  eventAttendees: '參與者',
+  eventColor: '顏色標籤',
+  save: '保存',
+  cancel: '取消',
+  update: '更新',
+  delete: '刪除',
+  
+  enterEventTitle: '輸入事件標題...',
+  enterEventDescription: '輸入事件描述...',
+  enterLocation: '輸入地點...',
+  enterAttendees: '輸入參與者...',
+  
+  lunarCalendar: '農曆',
+  solarTerms: '節氣',
+  
+  settings: '設置',
+  language: '語言',
+  theme: '主題',
+  
+  // 視圖
+  agenda: '日程',
+  desktop: '台曆',
+  
+  previousMonth: '上個月',
+  nextMonth: '下個月',
+  goToToday: '回到今天',
+   // 狀態
+  noEvents: '暫無事件',
+  loading: '載入中...',
+  error: '出錯了',
+  importSuccess: '事件匯入成功！',
+  importFailedFormat: '匯入失敗，請檢查文件格式',
+  
+  // 設置項
+  languageSettings: '語言設置',
+  selectInterfaceLanguage: '選擇介面顯示語言',
+  darkMode: '深色模式',
+  toggleLightDarkTheme: '切換淺色/深色主題',
+  showLunarCalendar: '顯示農曆',
+  displayLunarInfoInCalendar: '在日曆中顯示農曆資訊',
+  weekStartsOn: '一週開始',
+  sunday: '周日',
+  monday: '周一',
+  tuesday: '周二',
+  wednesday: '周三',
+  thursday: '周四',
+  friday: '周五',
+  saturday: '周六',
+  setFirstDayOfWeek: '設定一週的第一天',
+  eventReminders: '事件提醒',
+  enableEventNotifications: '開啟事件到期提醒',
+  
+  // 過濾器和統計
+  all: '全部',
+  todayEvents: '今日事件',
+  weekEvents: '本週事件',
+  monthEvents: '本月事件',
+  eventsCount: '個事件',
+  noEventsToday: '今天沒有安排的事件',
+  noEventsWeek: '本週沒有安排的事件',
+  noEventsMonth: '本月沒有安排的事件',
+  noEventsRecent: '近期沒有安排的事件',
+  
+  // 確認對話框
+  confirmClearAllEvents: '確定要清除所有事件嗎？此操作不可撤銷。',
+  
+  // 農曆資訊
+  lunarInfo: '農曆:',
+  
+  festivals: {
+    'newYear': '元旦',
+    'valentineDay': '情人節',
+    'womenDay': '婦女節',
+    'aprilFoolsDay': '愚人節',
+    'laborDay': '勞動節',
+    'childrenDay': '兒童節',
+    'qixi': '七夕',
+    'armyDay': '建軍節',
+    'teacherDay': '教師節',
+    'nationalDay': '國慶節',
+    'christmas': '聖誕節'
+  }
+};
